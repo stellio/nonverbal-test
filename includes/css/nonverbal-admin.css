@@ -1,0 +1,77 @@
+/**
+ * TreeTest Admin Styles
+ */
+
+.relations .question {
+	background-color: #eeeeee;	
+	/*background-color: #1abc9c;*/
+}
+
+.relations .answer {
+	/*background-color: #95a5a6;*/
+	/*background-color: #16a085;*/
+}
+
+.treetest-icons {
+	/*width: 24px;*/
+	/*height: 24px;*/
+	margin: 0px 10px 0px 0px;
+}
+
+#treetest-answer-value {
+	background-color:  #e7ffe7;
+}
+
+#treetest-sign-value {
+	background-color:  #e7ffe7;
+	width: 70px;
+}
+
+#treetest-profile-value {
+	background-color:  #e7ffe7;
+	width: 100px;
+}
+
+#treetest-tpe-value {
+	background-color:  #e7ffe7;
+	width: 100px;
+}
+
+#treetest-result-sequence {
+	background-color:  #e7ffe7;
+}
+
+.highlight-input {
+	/*border-color: #e74c3c;*/
+	border-color: red !important;
+}
+
+.highlight-textarea {
+	border: 1px solid #e74c3c !important;
+}
+
+.loading-ajax {
+	background-image: url("../../assets/img/loading.gif");
+	background-repeat: no-repeat;
+	background-size: 150px;
+	height: 150px;
+	left: 50%;
+	top: 50%;
+	margin-left: -75px;
+	position: absolute;
+	width: 150px;
+	/*position: absolute;*/
+  	/*left: 0;*/
+  	/*top: 0;*/
+  	/*right: 0;*/
+  	/*bottom: 0;/*/
+  	/*margin: auto; /* pre*/
+}
+
+.grey {
+	background-color: #bfffc1;
+}
+
+.strong {
+	font-weight: bold;
+}

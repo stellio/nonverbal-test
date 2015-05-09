@@ -1,0 +1,19 @@
+{
+  "vars": {},
+  "css": [
+    "grid.less",
+    "forms.less",
+    "buttons.less",
+    "button-groups.less",
+    "input-groups.less",
+    "labels.less",
+    "jumbotron.less",
+    "alerts.less",
+    "progress-bars.less",
+    "panels.less"
+  ],
+  "js": [
+    "dropdown.js"
+  ],
+  "customizerUrl": "http://getbootstrap.com/customize/?id=5fe89ae20cf3715be5d6"
+}

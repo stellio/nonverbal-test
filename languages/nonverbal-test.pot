@@ -1,0 +1,207 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WP TreeTest 0.1\n"
+"POT-Creation-Date: 2015-04-02 16:42+0200\n"
+"PO-Revision-Date: 2015-04-02 16:42+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.7.3\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __\n"
+"X-Poedit-SearchPath-0: ../includes\n"
+
+#: ../includes/controller/Controller_Front.php:435
+msgid "TPE"
+msgstr ""
+
+#: ../includes/controller/Controller_Front.php:436
+msgid "Functional"
+msgstr ""
+
+#: ../includes/controller/Controller_Front.php:437
+#: ../includes/view/View_Front.php:86
+msgid "Repeat testing"
+msgstr ""
+
+#: ../includes/controller/Controller_Front.php:438
+msgid "Subtype TPE is not found. It is recommended to repeat the test again."
+msgstr ""
+
+#: ../includes/controller/Controller_Front.php:439
+msgid ""
+"The leading type TPE is not defined. It is recommended to repeat the test "
+"again."
+msgstr ""
+
+#: ../includes/controller/Controller_Front.php:440
+msgid "Can't Load Tpe Quadras"
+msgstr ""
+
+#: ../includes/controller/Controller_Front.php:441
+msgid "Error! Failed to load the result"
+msgstr ""
+
+#: ../includes/view/View_Front.php:32
+msgid "Testing completed!"
+msgstr ""
+
+#: ../includes/view/View_Front.php:33
+msgid "Congratulations!"
+msgstr ""
+
+#: ../includes/view/View_Front.php:34
+msgid ""
+"To view results please, answer the following questions for the confidential "
+"collection of test statistics"
+msgstr ""
+
+#: ../includes/view/View_Front.php:42
+msgid "Graphs of the distribution of signs"
+msgstr ""
+
+#: ../includes/view/View_Front.php:48
+msgid "TPE graphics domination"
+msgstr ""
+
+#: ../includes/view/View_Front.php:81
+msgid "Start testing"
+msgstr ""
+
+#: ../includes/view/View_Front.php:93
+msgid ""
+"Please, answer the following questions for the confidential collection of "
+"test statistics:"
+msgstr ""
+
+#: ../includes/view/View_Front.php:97
+msgid "How do you type yourself?"
+msgstr ""
+
+#: ../includes/view/View_Front.php:101
+msgid "(ILI) Honore de Balzac"
+msgstr ""
+
+#: ../includes/view/View_Front.php:102
+msgid "(SLI) Jean Gabin"
+msgstr ""
+
+#: ../includes/view/View_Front.php:103
+msgid "(EIE) Hamlet"
+msgstr ""
+
+#: ../includes/view/View_Front.php:104
+msgid "(IEE) Aldous Huxley"
+msgstr ""
+
+#: ../includes/view/View_Front.php:105
+msgid "(LSI) Gorky"
+msgstr ""
+
+#: ../includes/view/View_Front.php:106
+msgid "(ESE) Victor Hugo"
+msgstr ""
+
+#: ../includes/view/View_Front.php:107
+msgid "(LIE) Jack London"
+msgstr ""
+
+#: ../includes/view/View_Front.php:108
+msgid "(ILE) Don Quixote"
+msgstr ""
+
+#: ../includes/view/View_Front.php:109
+msgid "(EII) Fyodor Dostoyevsky"
+msgstr ""
+
+#: ../includes/view/View_Front.php:110
+msgid "(ESI) Dreiser"
+msgstr ""
+
+#: ../includes/view/View_Front.php:111
+msgid "(SEI) Dumas"
+msgstr ""
+
+#: ../includes/view/View_Front.php:112
+msgid "(IEI) Sergei Yesenin"
+msgstr ""
+
+#: ../includes/view/View_Front.php:113
+msgid "(SLE) Georgy Zhukov"
+msgstr ""
+
+#: ../includes/view/View_Front.php:114
+msgid "(SEE) Napoleon I."
+msgstr ""
+
+#: ../includes/view/View_Front.php:115
+msgid "(LII) Maximilien Robespierre"
+msgstr ""
+
+#: ../includes/view/View_Front.php:116
+msgid "(LSE) Stierlitz"
+msgstr ""
+
+#: ../includes/view/View_Front.php:121
+msgid ""
+"If you are not sure, please, indicate another type(s) as a most probable "
+"option."
+msgstr ""
+
+#: ../includes/view/View_Front.php:127
+msgid "On what basis did you decide about your type?"
+msgstr ""
+
+#: ../includes/view/View_Front.php:130
+msgid "Test results"
+msgstr ""
+
+#: ../includes/view/View_Front.php:131
+msgid "Forum’s discussion"
+msgstr ""
+
+#: ../includes/view/View_Front.php:132
+msgid "Friend’s help"
+msgstr ""
+
+#: ../includes/view/View_Front.php:133
+msgid "Consultancy"
+msgstr ""
+
+#: ../includes/view/View_Front.php:134
+msgid "Other"
+msgstr ""
+
+#: ../includes/view/View_Front.php:138
+msgid "What is your age?"
+msgstr ""
+
+#: ../includes/view/View_Front.php:142
+msgid "What is your gender?"
+msgstr ""
+
+#: ../includes/view/View_Front.php:144
+msgid "Male"
+msgstr ""
+
+#: ../includes/view/View_Front.php:145
+msgid "Female"
+msgstr ""
+
+#: ../includes/view/View_Front.php:149
+msgid "What is your name or nickname?"
+msgstr ""
+
+#: ../includes/view/View_Front.php:154
+msgid "Please review your responses and click submit to view results."
+msgstr ""
+
+#: ../includes/view/View_Front.php:157
+msgid "Submit"
+msgstr ""

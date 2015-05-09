@@ -1,0 +1,165 @@
+/*
+Plugin Name: WP Tree Test
+Plugin URI: http://www.stellio.org.ua
+Description: A simple and powerfull plugin to make tree tests
+Author: Lisovoy Igor
+Author URI: http://www.stellio.org.ua
+*/
+
+/* 
+	TreeTest Front Style 
+*/
+.treetest {
+}
+
+/* Question Block */
+
+/* Navigation Block*/
+.testing-block .nav-block {
+}
+
+.treetest-sign-group-percentline {
+	/*border-radius: 5px;*/
+	/*margin: 5px;*/
+}
+
+.treetest-signs-block {
+	/*margin: 2%;*/
+}
+
+.treetest-sign-group-percentline div {
+	/*border-*/
+}
+
+/* Navigation Left Side */
+.treetest-question-block .nav-block .left-side {
+	float: left;
+}
+
+/* Navigation Right Side */
+.treetest-question-block .nav-block .right-side {
+	float: right;
+	/*background-color: lime;*/
+}
+
+.treetest-question-block .clear {
+	clear: both;
+}
+
+.treetest-question-block {
+	text-align: center;
+}
+
+.treetest-question-block .answer-block {
+	margin-top: 50px;
+	margin-bottom: 50px;
+}
+
+.treetest .treetest-start-test {
+	font-size: 14px;
+	background: #3b8dbd;
+	color: #fff;
+	padding: 8px 14px;
+	font-weight: 600;
+	display: inline-block;
+	border: none;
+	cursor: pointer;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+}
+
+.treetest .treetest-start-test:hover {
+	background: #444;
+}
+
+.treetest .treetest-start-test:active {
+	/*position:relative;*/
+	/*top:1px;*/
+}
+
+/* Navigation buttons */
+.treetest button.treetest-next-question {
+
+	font-size: 14px;
+	background: #3b8dbd;
+	color: #fff;
+	padding: 8px 14px;
+	font-weight: 600;
+	display: inline-block;
+	border: none;
+	cursor: pointer;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+}
+
+.treetest button.treetest-next-question:hover {
+	background: #444;
+}
+
+.treetest button.treetest-next-question:active {
+	position:relative;
+	top:1px;
+}
+
+
+/* Shor Result Button*/
+.treetest button.treetest-show-result {
+	-moz-box-shadow:inset 0px 1px 0px 0px #f5978e;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #f5978e;
+	box-shadow:inset 0px 1px 0px 0px #f5978e;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #f24537), color-stop(1, #c62d1f));
+	background:-moz-linear-gradient(top, #f24537 5%, #c62d1f 100%);
+	background:-webkit-linear-gradient(top, #f24537 5%, #c62d1f 100%);
+	background:-o-linear-gradient(top, #f24537 5%, #c62d1f 100%);
+	background:-ms-linear-gradient(top, #f24537 5%, #c62d1f 100%);
+	background:linear-gradient(to bottom, #f24537 5%, #c62d1f 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#f24537', endColorstr='#c62d1f',GradientType=0);
+	background-color:#f24537;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border:1px solid #d02718;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:6px 24px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #810e05;
+}
+
+.treetest button.treetest-show-result:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #c62d1f), color-stop(1, #f24537));
+	background:-moz-linear-gradient(top, #c62d1f 5%, #f24537 100%);
+	background:-webkit-linear-gradient(top, #c62d1f 5%, #f24537 100%);
+	background:-o-linear-gradient(top, #c62d1f 5%, #f24537 100%);
+	background:-ms-linear-gradient(top, #c62d1f 5%, #f24537 100%);
+	background:linear-gradient(to bottom, #c62d1f 5%, #f24537 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#c62d1f', endColorstr='#f24537',GradientType=0);
+	background-color:#c62d1f;
+}
+
+
+.treetest button.treetest-show-result:active {
+	position:relative;
+	top:1px;
+}
+
+.treetest .hidden {
+	display: none;
+}
+
+#survey-form {
+	margin: 15px 10px 10px 10px;
+}
+
+body input:focus:required:invalid,
+body textarea:focus:required:invalid {
+	/*border:red 3px solid*/
+}
+body input:required:valid,
+body textarea:required:valid {
+	/*border: green 3px solid*/
+}
