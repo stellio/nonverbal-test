@@ -7,7 +7,7 @@ Author: Lisovoy Igor
 Author URI: http://www.stellio.org.ua
 */
 
-class Controller_nvTpe extends NV_Controller {
+class Controller_nvTpe extends nvController {
 
     public $view = 0;
 
@@ -21,9 +21,9 @@ class Controller_nvTpe extends NV_Controller {
     public function action_index() {
         $tpeList = array();
 
-        $test = new Model_nvTest();
-        $tpe = new Model_nvTpe();
-        $this->view = new View_nvTpeList();
+        $test = nvModel::factory('nvTest');
+        $tpe =  nvModel::factory('nvTpe');
+        $view = nvView::factory('tpe/list');
 
         $testId = $this->req('test_id');
         if ($testId) {
@@ -35,9 +35,8 @@ class Controller_nvTpe extends NV_Controller {
             }
         }
 
-        $this->view->test = $test;
-        $this->view->tpeList = $tpeList;
-        $this->view->show();
+        $this->template->content = $view->bind('test', $test)->bind('tpeList', $tpeList);
+        
     }
 
     /**

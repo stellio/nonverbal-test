@@ -33,12 +33,19 @@ class Controller_nvAjax extends nvController {
 		add_action('wp_ajax_nonverbal_test_show_test', array($this, 'showTest'));
 		add_action('wp_ajax_nopriv_nonverbal_test_show_test', array($this, 'showTest'));
 
-		// back end
+		/*
+			Backend part
+		 */
 		add_action('wp_ajax_nonverbal_test_create_test', array($this, 'createTest'));
 		add_action('wp_ajax_nopriv_nonverbal_test_create_test', array($this, 'createTest'));
 
 		add_action('wp_ajax_nonverbal_test_remove_result', array($this, 'removeResult'));
 		add_action('wp_ajax_nopriv_nonverbal_test_remove_result', array($this, 'removeResult'));
+
+		// Test menu actions
+		add_action('wp_ajax_nonverbal_test_menu_action', array($this, 'testMenuAction'));
+		add_action('wp_ajax_nopriv_nonverbal_test_menu_action', array($this, 'testMenuAction'));
+
 	}
 
 	/**
@@ -81,6 +88,32 @@ class Controller_nvAjax extends nvController {
 
 		$controllerFront = new Controller_nvFront();
 		$controllerFront->showTest();
+		die();
+	}
+
+	public function testMenuAction() {
+
+		
+		$request =  $this->req('request');
+
+		// echo $request;
+
+		$request = str_replace("admin.php?", "", $request);
+
+		$requestParts = split("&", $request);
+
+		// print_r($requestParts);
+
+		foreach ($requestParts as $part) {
+			
+			$name_value = split('=', $part);
+
+			if (count($name_value) != 0) {
+				$_GET[$name_value[0]] = $name_value[1];
+			}
+		}
+		nvRouting::execute();
+
 		die();
 	}
 

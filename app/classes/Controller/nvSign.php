@@ -7,7 +7,7 @@ Author: Lisovoy Igor
 Author URI: http://www.stellio.org.ua
 */
 
-class Controller_nvSign extends Controller_TestMenuTemplate {
+class Controller_nvSign extends Controller_ContentTemplate {
 	
 	public $view = 0;
 

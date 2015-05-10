@@ -1,4 +1,4 @@
-<div class="container-fluid wrap">
+<div class="container-fluid wrap nv-header">
 	<div class="row">
 		<div class="col-md-12">
 			<nav class="navbar navbar-inverse navbar-embossed" role="navigation">

@@ -7,6 +7,8 @@ jQuery(document).ready(function ($) {
 		Author URI: http://www.stellio.org.ua
 	*/
 	var glob = localize;
+
+	function log(val) { console.log(val)};
 	
 
 	/* helpful tools */
@@ -65,7 +67,7 @@ jQuery(document).ready(function ($) {
 		loadingMsg : function(type) {
 
 			if (type == 'show') {
-				$('div.wrap').prepend("<div class='loading-ajax'></div>");
+				$('div.wrap').prepend("<div style='z-index: 9999;' class='loading-ajax'></div>");
 			} else if (type == 'hide') {
 				$('div.wrap').find("div.loading-ajax").remove();
 			}
@@ -253,10 +255,35 @@ jQuery(document).ready(function ($) {
 	});
 
 
-	$('.ajax-call').click(function) {
+	$('a.ajax-call').click(function(e) {
 
-		alert('click?');
-	}
+		e.preventDefault();
+		
+		var action = $(this).attr("href");
+
+		tools.loadingMsg('show');
+		$.post(glob.ajaxurl, { action : 'nonverbal_test_menu_action', request: action}, function(result, status) {
+
+
+			$('.nv-content').html(result);
+
+			if (status == 'success') {
+				tools.loadingMsg('hide');
+
+				if (result.status == 'error') {
+					alert(result.value);
+				} else if (result.status == 'success') {
+
+					$('.nv-content').html(result.value);
+				} else {
+					tools.loadingMsg('hide');
+
+				}
+
+			}
+
+		});
+	});
 
 	// init some function
 	init();
