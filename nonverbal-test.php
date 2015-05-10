@@ -34,9 +34,9 @@ require NV_SYSPATH . 'classes/nvTest' . NV_EXT;
 spl_autoload_register(array('Core_Test', 'auto_load'));
 
 // require_once(NV_DIR . 'includes/Loader.php');
-// require_once(NV_DIR . 'includes/helper/nvDbUpdate.php');
+require_once(NV_DIR . 'includes/helper/nvDbUpdate.php');
 
-// register_activation_hook(__FILE__, 'nv_activation');
+register_activation_hook(__FILE__, 'nv_activation');
 // add_action('plugins_loaded', 'nv_plugins_loaded');
 
 function nv_autoload($class) {
@@ -82,7 +82,7 @@ function nv_autoload($class) {
 }
 
 function nv_activation() {
-	// new Helper_nvDbUpdate();
+	new Helper_nvDbUpdate();
 }
 
 function nv_plugins_loaded() {
@@ -99,7 +99,7 @@ function nv_init() {
 		// new TreeTest();
 		// new TreeTestSettings();
 	// TT_Routing::execute();
-	// new Controller_nvAjax();
+	new Controller_nvAjax();
 
 }
 

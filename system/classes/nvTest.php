@@ -9,7 +9,7 @@ class nvTest extends Core_Test {
 
 		add_action('admin_menu', array($this, 'initMenu'));
 		// add_action('admin_init', array($this, 'installSettings'));
-		// add_action('admin_enqueue_scripts', array($this, 'enqueueScript'));
+		add_action('admin_enqueue_scripts', array($this, 'loadAssets'));
 	}	
 
 	/**
@@ -34,6 +34,31 @@ class nvTest extends Core_Test {
 //            'TreeTest&module=Settings', 	// menu slug
 //            array( $this, 'route' )			// function
 //		);
+	}
+
+
+	public function loadAssets() {
+
+		// self
+		wp_enqueue_style(
+			'nonverbal-test-admin-style',
+			NV_URL . 'assets/css/nonverbal-admin.css'
+		);
+
+		// Tools for answers add/remove
+		wp_enqueue_script(
+			'nonverbal-test-admin',
+			NV_URL . 'assets/js/nonverbal-admin.js',
+			array('jquery')
+		);
+
+		wp_localize_script(
+			'nonverbal-test-admin', 
+			'localize', 
+			array(
+				'ajaxurl' => admin_url('admin-ajax.php')
+			)
+		);
 	}
 
 	public function route() {

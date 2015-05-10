@@ -10,7 +10,7 @@ Author URI: http://www.stellio.org.ua
 /**
  * Ajax controller, usig to serve ajax requests
  */
-class Controller_nvAjax extends NV_Controller {
+class Controller_nvAjax extends nvController {
 
 	public function __construct() {
 		parent::__construct();

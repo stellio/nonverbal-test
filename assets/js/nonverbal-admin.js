@@ -187,7 +187,7 @@ jQuery(document).ready(function ($) {
 		
 	});
 
-	// Remove added answer field
+	// Remove, added answer field
 	$("#treetest-answer-remove").live('click', function() {
 
 		var isDelete = confirm('Are You Sure?');
@@ -251,6 +251,12 @@ jQuery(document).ready(function ($) {
 		}
 
 	});
+
+
+	$('.ajax-call').click(function) {
+
+		alert('click?');
+	}
 
 	// init some function
 	init();

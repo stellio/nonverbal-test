@@ -1,6 +1,6 @@
 <div>
     <h4>Список тестов</h4>
-    <!-- <input type="button" id="but_add_test" class="button-primary" value='Добавить Тест'> -->
+    <input type="button" id="but_add_test" class="button-primary" value='Добавить Тест'>
     <p></p>
     <div class="new_test_block" style="display: none;">
         <input type="text" id="text_new_test_name" class="regular-text" value="" placeholder="Название теста">
