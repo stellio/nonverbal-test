@@ -18,23 +18,25 @@
                                     <?=$tpe->sequence_of_sign?>
                                 </td>
                                 <td>
-                                    <?=$this->link(array(
+                                    <?=nvHtml::link(array(
                                         'module' => 'nvTpe',
                                         'action' => 'edit',
-                                        'test_id' => $this->test->getId(),
+                                        'test_id' => $test->getId(),
                                         'id' => $tpe->id
                                     ),
-                                        $this->imgEdit(),
-                                        "Редактировать"
+                                        nvHtml::imgEdit(),
+                                        "Редактировать", 
+                                        'ajax-call'
                                     );?>
-                                    <?=$this->link(array(
+                                    <?=nvHtml::link(array(
                                         'module' => 'nvTpe',
                                         'action' => 'delete',
-                                        'test_id' => $this->test->getId(),
+                                        'test_id' => $test->getId(),
                                         'id' => $tpe->id
                                     ),
-                                        $this->imgDelete(),
-                                        "Удалить"
+                                        nvHtml::imgDelete(),
+                                        "Удалить",
+                                        'ajax-call'
                                     );?>
                                 </td>
                             </tr>
@@ -47,14 +49,14 @@
                     </tbody>
                 </table>
                 <p></p>
-                <?php echo $this->button(
+                <?php echo nvHtml::button(
                     array(
                         'module' => 'nvTpe',
                         'action' => 'edit',
-                        'test_id' => $this->test->getId()
+                        'test_id' => $test->getId()
                     ),
                     "Добавить",
-                    "button-secondary");
+                    "ajax-call button-secondary");
                 ?>
                 <p></p>
             </div>

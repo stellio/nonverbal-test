@@ -10,7 +10,7 @@ Author URI: http://www.stellio.org.ua
 /**
  * Add, update, delete question
  */
-class Controller_nvQuestion extends NV_Controller {
+class Controller_nvQuestion extends Controller_ContentTemplate {
 	
 	const TYPE_NEW = 'new';
 	const TYPE_EXISTS = 'exists';
@@ -27,42 +27,40 @@ class Controller_nvQuestion extends NV_Controller {
 	 */
 	public function action_index() {
 
-		$test = new Model_nvTest();
-		$answers = new Model_nvAnswer();
-		$question = new Model_nvQuestion();
-		$this->view = new View_nvQuestionList();
+		$test = nvModel::factory('nvTest');
+		$answers = nvModel::factory('nvAnswer');
+		$question = nvModel::factory('nvQuestion');
+		$view = nvView::factory('question/list');
+		$content = null;
 		
 		$id = $this->req('test_id');
 
 		if ($id) {
 
-			$this->view->content = $question->getListByTestId($id);
+			$content = $question->getListByTestId($id);
 			$test->loadById($id);
 			$this->testId = $id;
 		}
 
-		// $this->view->question = $question;
-		$this->view->testId = $this->testId;
-		$this->view->test = $test;
-		$this->view->answers = $answers;
-		$this->view->show();
-	}
+		$this->template->content = $view->bind('testId', $this->testId)
+										->bind('test', $test)
+									    ->bind('answers', $answers)
+									    ->bind('content', $content);
+    }
 
 	/**
 	 * Show form to add new question
 	 */
 	public function action_add() {
 
-		$test = new Model_nvTest();
-		$question = new Model_nvQuestion();
-		$this->view = new View_nvQuestionAdd();
+		$test = nvModel::factory('nvTest');
+		$question = nvModel::factory('nvQuestion');
+		$view = nvView::factory('question/edit');
 
 		if ($this->req('test_id'))
 			$test->loadById($this->req('test_id'));
 
-		$this->view->test = $test;
-		$this->view->question = $question;
-		$this->view->show();
+		$this->template->content = $view->bind('test', $test)->bind('question', $question);
 	}
 
 	/**
@@ -70,10 +68,10 @@ class Controller_nvQuestion extends NV_Controller {
 	 */
 	public function action_edit() {
 
-		$test = new Model_nvTest();
-		$answer = new Model_nvAnswer();
-		$question = new Model_nvQuestion();
-		$this->view = new View_nvQuestionAdd();
+		$test = nvModel::factory('nvTest');
+		$answer = nvModel::factory('nvAnswer');
+		$question = nvModel::factory('nvQuestion');
+		$view = nvView::factory('question/edit');
 		$answers = array();
 
 		if ($this->req('test_id')) {
@@ -86,11 +84,9 @@ class Controller_nvQuestion extends NV_Controller {
 			}
 		}
 
-		$this->view->test = $test;
-		$this->view->answers = $answers;
-		$this->view->question = $question;
-
-		$this->view->show();
+		$this->template->content = $view->bind('test', $test)
+										->bind('answers', $answers)
+										->bind('question', $question);
 	}
 
 	/**
@@ -99,10 +95,11 @@ class Controller_nvQuestion extends NV_Controller {
 	public function action_save() {
 
 		$answersList = array();
-		$test = new Model_nvTest();
-		$answer = new Model_nvAnswer();
-		$question = new Model_nvQuestion();
-		$this->view = new View_nvQuestionAdd();
+		$test = nvModel::factory('nvTest');
+		$answer = nvModel::factory('nvAnswer');
+		$question = nvModel::factory('nvQuestion');
+		// $this->view = new View_nvQuestionAdd();
+		// $view = nvView::factory()
 
 		// first check if 'test_id' set
 		if ($this->req('test_id')) {
@@ -127,9 +124,9 @@ class Controller_nvQuestion extends NV_Controller {
 				}
 
 				if ($question->update($this->req('id')))
-					NV_View::admin_notices('Question Updated', 'info');
+					nvHtml::admin_notices('Question Updated', 'info');
 				else
-					NV_View::admin_notices('Cant Updated The Question!');
+					nvHtml::admin_notices('Cant Updated The Question!');
 			}
 			// save question as new
 			else {
@@ -148,10 +145,10 @@ class Controller_nvQuestion extends NV_Controller {
 						$test->update($test->getId());	
 					}
 
-					NV_View::admin_notices('Question Created', 'info');
+					nvHtml::admin_notices('Question Created', 'info');
 				}
 				else
-					NV_View::admin_notices('Cant Create Question');
+					nvHtml::admin_notices('Cant Create Question');
 			}
 
 			// check set answers
@@ -162,7 +159,7 @@ class Controller_nvQuestion extends NV_Controller {
 				foreach ($this->req('answers') as $type => $answers) {
 
 					// if type 'exists' -> update answer
-					if ($type == Controller_nvQuestion::TYPE_EXISTS) {
+					if ($type == nvModel::TYPE_EXISTS) {
 						foreach ($answers as $id => $ans) {
 
 							// load another answer details (test_id, question_id, next_question_id)
@@ -173,28 +170,28 @@ class Controller_nvQuestion extends NV_Controller {
 
 							// try to update
 							if (!$answer->update($id))
-								NV_View::admin_notices('Cant Update Answer');
+								nvHtml::admin_notices('Cant Update Answer');
 						}
 					}
 					// if 'new' - save
-					elseif ($type == Controller_nvQuestion::TYPE_NEW) {
+					elseif ($type == nvModel::TYPE_NEW) {
 						foreach ($answers as $id => $ans) {
 							// check if text not empty
 							// clean veriable
 							if (!empty($ans['text'])) {
-								$answer = new Model_nvAnswer();
+								$answer = nvModel::factory('nvAnswer');
 								$answer->setTestId($this->req('test_id'));
 								$answer->setText($ans['text']);
 								$answer->setValue($ans['value']);
 								$answer->setType($profileType);
 								$answer->setQuestionId($question->getId());
 								if (!$answer->save())
-									NV_View::admin_notices('Can\'t Save Answer');			
+									nvHtml::admin_notices('Can\'t Save Answer');			
 							}
 						}
 					}
 					// if 'remove' - remove
-					elseif ($type == Controller_nvQuestion::TYPE_REMOVE) {
+					elseif ($type == nvModel::TYPE_REMOVE) {
 						foreach ($answers as $id => $text) {
 							$answer->delete($id);
 						}
@@ -205,10 +202,6 @@ class Controller_nvQuestion extends NV_Controller {
 			$answersList = $answer->getListByQuestionIdAndTestId($question->getId(), $test->getId());
 		}
 
-//		$this->view->test = $test;
-//		$this->view->question = $question;
-//		$this->view->answers = $answersList;
-//		$this->view->show();
 		$this->action_index();
 	}
 
@@ -217,34 +210,22 @@ class Controller_nvQuestion extends NV_Controller {
 	 */
 	public function action_delete() {
 
-		$test = new Model_nvTest();
-		$answers = new Model_nvAnswer();
-		$question = new Model_nvQuestion();
-		$this->view = new View_nvQuestionList();
-		
+		$test = nvModel::factory('nvTest');
+		$answers = nvModel::factory('nvAnswer');
+		$question = nvModel::factory('nvQuestion');
+				
 		$id = $this->req('id');
 		$testId = $this->req('test_id');
 
 		if ($id) {
 			if ($question->delete($id)) 
-				NV_View::admin_notices('Question Deleted', 'info');
+				nvHtml::admin_notices('Question Deleted', 'info');
 			else
-				NV_View::admin_notices('Cant Delete The Question!');
+				nvHtml::admin_notices('Cant Delete The Question!');
 		}
 
 
-		if ($testId) {
-
-			$this->view->content = $question->getListByTestId($testId);
-			$test->loadById($testId);
-			$this->testId = $testId;
-		}
-
-		// $this->view->question = $question;
-		$this->view->testId = $this->testId;
-		$this->view->answers = $answers;
-		$this->view->test = $test;
-		$this->view->show();
+		$this->action_index();
 	}
 }
 ?>

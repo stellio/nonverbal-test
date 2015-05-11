@@ -248,22 +248,85 @@ jQuery(document).ready(function ($) {
 					alert("Ошибка! Не удалось удалить результат.");
 				}
 			});
-
-
 		}
-
 	});
 
+	/**
+	 * Ajax Calls
+	 */
+	
+	function tinyMCE_init(){
+		 // quicktags({id : 'text'});
+		  tinyMCE.init({
+    		skin : "simple",
+	        mode:"textareas"
+    });
+    		// other options here
+  // });
+            //init tinymce
+         // tinymce.init(tinyMCEPreInit.mceInit['text']);
+	};
 
-	$('a.ajax-call').click(function(e) {
+	// main test menu action
+	$('a.ajax-call').live('click', function(e) {
 
 		e.preventDefault();
-		
 		var action = $(this).attr("href");
+
+		if (action.indexOf("delete") > -1) {
+			if (confirm("Вы действительно хотите удалить?")) {
+
+			} else {
+				return;
+			}
+			
+		}
 
 		tools.loadingMsg('show');
 		$.post(glob.ajaxurl, { action : 'nonverbal_test_menu_action', request: action}, function(result, status) {
 
+			$('.nv-content').html(result);
+
+			if ( $( "textarea#text" ).length ) {
+ 
+ 				tinyMCE_init();
+    			alert("textarea exists");
+ 
+			}
+
+
+
+
+			// tinymce.init(tinyMCEPreInit.mceInit['text']);
+
+			if (status == 'success') {
+				tools.loadingMsg('hide');
+
+				if (result.status == 'error') {
+					alert(result.value);
+				} else if (result.status == 'success') {
+
+					$('.nv-content').html(result.value);
+				} else {
+					tools.loadingMsg('hide');
+
+				}
+			}
+		});
+	});
+
+	// test forms action
+	$('form.ajax-call').live('submit', function(e) {
+
+		e.preventDefault();
+		
+		var action = $(this).attr('action');
+		var params = $(this).serialize();
+		// log(action+params);
+		action = action + '&' + params;
+
+		tools.loadingMsg('show');
+		$.post(glob.ajaxurl, { action : 'nonverbal_test_menu_action', request: action}, function(result, status) {
 
 			$('.nv-content').html(result);
 

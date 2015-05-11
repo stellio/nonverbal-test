@@ -51,23 +51,18 @@ class Controller_nvSign extends Controller_ContentTemplate {
 			}
 		}
 
-		$this->template->content = $view
-			->bind('test', $test)
-			->bind('groupsTPE', $groupsTPE)
-			->bind('groupsFunc', $groupsFunc);
+		$this->template->content = $view->bind('test', $test)
+										->bind('groupsTPE', $groupsTPE)
+										->bind('groupsFunc', $groupsFunc);
 
-		// $this->view->groupsTPE = $groupsTPE;
-		// $this->view->groupsFunc = $groupsFunc;
-		// $this->view->test = $test;
-		// $this->view->show();
 	}
 
 
 	public function action_edit() {
 
-		$signsGroup = new Model_nvSignsGroup();
-		$test = new Model_nvTest();
-		$this->view = new View_nvSignAdd();
+		$signsGroup = nvModel::factory('nvSignsGroup');
+		$test = nvModel::factory('nvTest');
+		$view = nvView::factory('sign/edit');
 
 		$id = $this->req('id');
 		$type = $this->req('type');
@@ -80,20 +75,18 @@ class Controller_nvSign extends Controller_ContentTemplate {
 			if ($id) {
 				$signsGroup->setId($id);
 				$signsGroup->loadGroup($testId, $id);
+
 			}
 		}
 
-		$this->view->test = $test;
-		$this->view->signsGroup = $signsGroup;
-
-		$this->view->show();
+		$this->template->content = $view->bind('test', $test)
+										->bind('signsGroup', $signsGroup);
 	}
 
 	public function action_save() {
 
-		$sign = new Model_nvSign();
-		$signsGroup = new Model_nvSignsGroup();
-		$this->view = new View_nvSignList();
+		$sign = nvModel::factory('nvSign');
+		$signsGroup = nvModel::factory('nvSignsGroup');
 
 		$testId = $this->req('test_id');
 		$groupId = $this->req('id');
@@ -130,9 +123,9 @@ class Controller_nvSign extends Controller_ContentTemplate {
 						}
 					}
 					if ($signsGroup->update())
-						NV_View::admin_notices('Признаки успешно обновлены', 'info');
+						nvHtml::admin_notices('Признаки успешно обновлены', 'info');
 					else
-						NV_View::admin_notices('Не удалось обновить признаки');
+						nvHtml::admin_notices('Не удалось обновить признаки');
 				}
 			// save as new
 			} else {
@@ -159,9 +152,9 @@ class Controller_nvSign extends Controller_ContentTemplate {
 					}
 
 					if ($signsGroup->save())
-						NV_View::admin_notices('Признаки успешно добавлены', 'info');
+						nvHtml::admin_notices('Признаки успешно добавлены', 'info');
 					else
-						NV_View::admin_notices('Не удалось создать признаки');
+						nvHtml::admin_notices('Не удалось создать признаки');
 				}
 			}
 		}
@@ -171,9 +164,8 @@ class Controller_nvSign extends Controller_ContentTemplate {
 
 	public function  action_delete(){
 
-		$signsGroup = new Model_nvSignsGroup();
-		$test = new Model_nvTest();
-		$this->view = new View_nvSignAdd();
+		$signsGroup = nvModel::factory('nvSignsGroup');
+		$test = nvModel::factory('nvTest');
 
 		$testId = $this->req('test_id');
 		$id = $this->req('id');
@@ -186,9 +178,9 @@ class Controller_nvSign extends Controller_ContentTemplate {
 				$signsGroup->loadGroup($testId, $id);
 
 				if ($signsGroup->delete())
-					NV_View::admin_notices('Признаки успешно удалены', 'info');
+					nvHtml::admin_notices('Признаки успешно удалены', 'info');
 				else
-					NV_View::admin_notices('Не удалось удалить признаки');
+					nvHtml::admin_notices('Не удалось удалить признаки');
 			}
 		}
 		$this->action_index();

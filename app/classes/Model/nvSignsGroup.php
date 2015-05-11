@@ -29,8 +29,8 @@ class Model_nvSignsGroup extends Core_Model {
 	public function __construct() {
 		parent::__construct();
 
-		$this->firstPart = new Model_nvSign();
-		$this->secondPart = new Model_nvSign();
+		$this->firstPart = nvModel::factory('nvSign');
+		$this->secondPart = nvModel::factory('nvSign');
 	}
 
 	public function setId($id) {

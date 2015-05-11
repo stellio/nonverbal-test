@@ -11,7 +11,7 @@ Author URI: http://www.stellio.org.ua
 /**
  * Manage test results. Add, edit, save, delete
  */
-class Controller_nvResult extends NV_Controller {
+class Controller_nvResult extends Controller_ContentTemplate {
 	
 	public $view;
 	public $testId = '';
@@ -25,9 +25,9 @@ class Controller_nvResult extends NV_Controller {
 	 */
 	public function action_index() {
 
-		$test = new Model_nvTest();
-		$result = new Model_nvResult();
-		$this->view = new View_nvResultList();
+		$test = nvModel::factory('nvTest');
+		$result = nvModel::factory('nvResult');
+		$view = nvView::factory('result/list');
 
 		$results = array();
 		
@@ -38,10 +38,8 @@ class Controller_nvResult extends NV_Controller {
 			$results = $result->getListByTestId($test->getId());
 		}
 
-		$this->view->test = $test;
-		$this->view->results = $results;
-
-		$this->view->show();
+		$this->template->content = $view->bind('test', $test)
+										->bind('results', $results);
 	}
 
 	/**
@@ -49,10 +47,11 @@ class Controller_nvResult extends NV_Controller {
 	 */
 	public function action_add() {
 
-		$test = new Model_nvTest();
-		$result = new Model_nvResult();
-		$this->view = new View_nvResultAdd();
-		$tpe = new Model_nvTpe();
+		$test = nvModel::factory('nvTest');
+		$result = nvModel::factory('nvResult');
+		$tpe = nvModel::factory('nvTpe');
+		$view = nvView::factory('result/edit');
+
 		$tpeList = array();
 
 		$testId = $this->req('test_id');
@@ -61,11 +60,9 @@ class Controller_nvResult extends NV_Controller {
 			$tpeList = $tpe->loadByTest($testId);
 		}
 
-		$this->view->tpe = $tpeList;
-		$this->view->test = $test;
-		$this->view->result = $result;
-
-		$this->view->show();
+		$this->template->content = $view->bind('tpe', $tpeList)
+										->bind('test', $test)
+										->bind('result', $result);
 	}
 
 	/**
@@ -73,10 +70,10 @@ class Controller_nvResult extends NV_Controller {
 	 */
 	public function action_edit() {
 
-		$tpe = new Model_nvTpe();
-		$test = new Model_nvTest();
-		$result = new Model_nvResult();
-		$this->view = new View_nvResultAdd();
+		$tpe = nvModel::factory('nvTpe');
+		$test = nvModel::factory('nvTest');
+		$result = nvModel::factory('nvResult');
+		$view = nvView::factory('result/edit');
 
 		$tpeList = array();
 
@@ -91,11 +88,9 @@ class Controller_nvResult extends NV_Controller {
 			}
 		}
 
-		$this->view->tpe = $tpeList;
-		$this->view->test = $test;
-		$this->view->result = $result;
-
-		$this->view->show();
+		$this->template->content = $view->bind('tpe', $tpeList)
+										->bind('test', $test)
+										->bind('result', $result);
 	}
 
 	/**
@@ -103,9 +98,8 @@ class Controller_nvResult extends NV_Controller {
 	 */
 	public function action_save() {
 
-		$test = new Model_nvTest();
-		$result = new Model_nvResult();
-		$this->view = new View_nvResultAdd();
+		$test = nvModel::factory('nvTest');
+		$result = nvModel::factory('nvResult');
 
 		if ($this->req('test_id')) {
 			$test->loadById($this->req('test_id'));
@@ -121,9 +115,9 @@ class Controller_nvResult extends NV_Controller {
 				$result->setText($this->req('description'));
 
 				if ($result->update($this->req('id')))
-					NV_View::admin_notices('Result Updated', 'info');
+					nvHtml::admin_notices('Result Updated', 'info');
 				else
-					NV_View::admin_notices('Cant Updated The Result!');
+					nvHtml::admin_notices('Cant Updated The Result!');
 			}
 			// save result as new
 			else {
@@ -135,14 +129,11 @@ class Controller_nvResult extends NV_Controller {
 				$result->setText($this->req('description'));
 
 				if ($result->save())
-					NV_View::admin_notices('Result Created', 'info');
+					nvHtml::admin_notices('Result Created', 'info');
 				else
-					NV_View::admin_notices('Cant Create Result');
+					nvHtml::admin_notices('Cant Create Result');
 			}
 		}
-
-//		$this->view->test = $test;
-//		$this->view->result = $result;
 
 		$this->action_index();
 	}
@@ -152,9 +143,8 @@ class Controller_nvResult extends NV_Controller {
 	 */
 	public function action_delete() {
 
-		$test = new Model_nvTest();
-		$result = new Model_nvResult();
-		$this->view = new View_nvResultList();
+		$test = nvModel::factory('nvTest');
+		$result = nvModel::factory('nvResult');
 
 		$results = array();
 		
@@ -164,23 +154,14 @@ class Controller_nvResult extends NV_Controller {
 
 			if ($this->req('id')) {
 				if ($result->delete($this->req('id')))
-					NV_View::admin_notices('The Result successfully Removed', 'info');
+					nvHtml::admin_notices('The Result successfully Removed', 'info');
 				else
-					NV_View::admin_notices("Can't Delete Result");
+					nvHtml::admin_notices("Can't Delete Result");
 			}
 
 		}
 
-
-		if ($testId) {
-			$test->loadById($testId);
-			$results = $result->getListByTestId($test->getId());
-		}
-
-		$this->view->test = $test;
-		$this->view->results = $results;
-
-		$this->view->show();
+		$this->action_index();
 	}
 }
 ?>

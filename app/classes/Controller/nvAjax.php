@@ -94,9 +94,9 @@ class Controller_nvAjax extends nvController {
 	public function testMenuAction() {
 
 		
-		$request =  $this->req('request');
+		$request = urldecode($this->req('request'));
 
-		// echo $request;
+		echo $request;
 
 		$request = str_replace("admin.php?", "", $request);
 

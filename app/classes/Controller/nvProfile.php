@@ -7,7 +7,7 @@ Author: Lisovoy Igor
 Author URI: http://www.stellio.org.ua
 */
 
-class Controller_nvProfile extends NV_Controller {
+class Controller_nvProfile extends Controller_ContentTemplate {
 	
 	public $view = 0;
 
@@ -22,38 +22,38 @@ class Controller_nvProfile extends NV_Controller {
 		$profilesTPE = array();
 		$profilesFunc = array();
 
-		$test = new Model_nvTest();
-		$profiles = new Model_nvProfile();
-		$this->view = new View_nvProfilesList();
+		$test = nvModel::factory('nvTest');
+		$profiles = nvModel::factory('nvProfile');
+		$view = nvView::factory('profile/list');
 
 		$testId = $this->req('test_id');
 		if ($testId) {
 			$test->loadById($testId);
 
 			// load TPE Profiles
-			foreach ($profiles->loadByTestAndTypeId($testId, Model_nvProfile::TYPE_TPE) as $profile) {
+			foreach ($profiles->loadByTestAndTypeId($testId, nvModel::TYPE_TPE) as $profile) {
 				$profilesTPE[] = $profile;
 			}
 			// load Func. Profiles
-			foreach ($profiles->loadByTestAndTypeId($testId, Model_nvProfile::TYPE_FUNCTIONAL) as $profile) {
+			foreach ($profiles->loadByTestAndTypeId($testId, nvModel::TYPE_FUNCTIONAL) as $profile) {
 				$profilesFunc[] = $profile;
 
 			}
 		}
 
-		$this->view->test = $test;
-		$this->view->profilesTPE = $profilesTPE;
-		$this->view->profilesFunc = $profilesFunc;
-		$this->view->show();
+		$this->template->content = $view
+									->bind('test', $test)
+									->bind('profilesTPE', $profilesTPE)
+									->bind('profilesFunc', $profilesFunc);
 	}
 
 	/**
 	 * Show form to edit relations
 	 */
 	public function action_edit() {
-		$test = new Model_nvTest();
-		$profile = new Model_nvProfile();
-		$this->view = new View_nvProfileAdd();
+		$test = nvModel::factory('nvTest');
+		$profile = nvModel::factory('nvProfile');
+		$view = nvView::factory('profile/edit');
 
 		$id = $this->req('id');
 		$type = $this->req('type');
@@ -68,10 +68,7 @@ class Controller_nvProfile extends NV_Controller {
 			}
 		}
 
-		$this->view->test = $test;
-		$this->view->profile = $profile;
-
-		$this->view->show();
+		$this->template->content = $view->bind('test', $test)->bind('profile', $profile);
 	}
 
 	/**
@@ -81,7 +78,7 @@ class Controller_nvProfile extends NV_Controller {
 		$id = $this->req("id");
 		$type = $this->req("type");
 		$testId = $this->req("test_id");
-		$profile = new Model_nvProfile();
+		$profile = nvModel::factory('nvProfile');
 
 		if ($testId) {
 			$profile->setTestId($testId);
@@ -93,9 +90,9 @@ class Controller_nvProfile extends NV_Controller {
 				$profile->setSequenceOfSign($this->cleanUpStr($this->req('profileSequence')));
 
 				if ($profile->update($id))
-					NV_View::admin_notices('Профиль успешно обновлен', 'info');
+					nvHtml::admin_notices('Профиль успешно обновлен', 'info');
 				else
-					NV_View::admin_notices('Не удалось обновить профиль');
+					nvHtml::admin_notices('Не удалось обновить профиль');
 			// save, as new
 			} else {
 				$profile->setType($type);
@@ -104,9 +101,9 @@ class Controller_nvProfile extends NV_Controller {
 				$profile->setSequenceOfSign($this->cleanUpStr($this->req('profileSequence')));
 
 				if ($profile->save())
-					NV_View::admin_notices('Профиль успешно добавлен', 'info');
+					nvHtml::admin_notices('Профиль успешно добавлен', 'info');
 				else
-					NV_View::admin_notices('Не удалось создать профиль');
+					nvHtml::admin_notices('Не удалось создать профиль');
 			}
  		}
 
@@ -122,9 +119,9 @@ class Controller_nvProfile extends NV_Controller {
 		if ($testId) {
 			if ($id) {
 				if ($signsGroup->delete($id))
-					NV_View::admin_notices('Профиль успешно удалены', 'info');
+					nvHtml::admin_notices('Профиль успешно удален', 'info');
 				else
-					NV_View::admin_notices('Не удалось удалить профиль');
+					nvHtml::admin_notices('Не удалось удалить профиль');
 			}
 		}
 		$this->action_index();

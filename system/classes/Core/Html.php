@@ -179,15 +179,15 @@ class Core_Html extends Core_Object {
 
 
 	// Old funciton
-	public static function link($params = array(), $source = '', $hint = '') {
+	public static function link($params = array(), $source = '', $hint = '', $class = '') {
 
-		$entryPoint = 'admin.php?page=nvTest&';
+		$entryPoint = 'admin.php?page=NV&';
 		$url = array();
 
 		foreach ($params as $key => $value) {
 			$url[] = $key . '=' . $value ;
 		}
-		return '<a href="' . $entryPoint . join('&', $url) . '" title="' . $hint . '">' . $source . '</a>';
+		return '<a href="' . $entryPoint . join('&', $url) . '" title="' . $hint . '" class= ' . $class . '  >' . $source . '</a>';
 	}
 
 	public static function imgDelete() {
@@ -212,4 +212,28 @@ class Core_Html extends Core_Object {
 		}
 		return '<a class="' . $class . '" href="' . $entryPoint . join('&', $url) . '" >' . $source . '</a>';
 	}
+
+	public static function admin_notices($msg, $type = 'error') {
+		if($type === 'info')
+			echo '<div class="updated"><p><strong>'.$msg.'</strong></p></div>';
+		else
+			echo '<div class="error"><p><strong>'.$msg.'</strong></p></div>';
+	}
+
+	public static function shorten($val) {
+    	
+    	return mb_substr(strip_tags($val), 0, 70) . '...';
+    }
+
+    /**
+	 * Return '<option></option>' selected parameter if key and type equal
+	 * @param  string  $key		the option value id
+	 * @param  string  $type 	the item value from base
+	 * @return string			selected parameter|nothing
+	 */
+	public static function isSelected($key, $type) {
+
+        $result = ($key == $type) ? 'selected="selected"' : '';
+        return $result;
+    }
 }

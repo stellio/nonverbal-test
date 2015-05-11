@@ -7,7 +7,7 @@ Author: Lisovoy Igor
 Author URI: http://www.stellio.org.ua
 */
 
-class Controller_nvTpe extends nvController {
+class Controller_nvTpe extends Controller_ContentTemplate {
 
     public $view = 0;
 
@@ -43,9 +43,9 @@ class Controller_nvTpe extends nvController {
      * Show form to edit relations
      */
     public function action_edit() {
-        $test = new Model_nvTest();
-        $tpe = new Model_nvTpe();
-        $this->view = new View_nvTpeAdd();
+        $test = nvModel::factory('nvTest');
+        $tpe = nvModel::factory('nvTpe');
+        $view = nvView::factory('tpe/edit');
 
         $id = $this->req('id');
         $testId = $this->req('test_id');
@@ -58,9 +58,7 @@ class Controller_nvTpe extends nvController {
             }
         }
 
-        $this->view->test = $test;
-        $this->view->tpe = $tpe;
-        $this->view->show();
+        $this->template->content = $view->bind('test', $test)->bind('tpe', $tpe);
     }
 
     /**
@@ -69,7 +67,7 @@ class Controller_nvTpe extends nvController {
     public function action_save() {
         $id = $this->req("id");
         $testId = $this->req("test_id");
-        $tpe = new Model_nvTpe();
+        $tpe = nvModel::factory('nvTpe');
 
         if ($testId) {
             $tpe->setTestId($testId);
@@ -81,9 +79,9 @@ class Controller_nvTpe extends nvController {
                 $tpe->setSequenceOfSign($this->cleanUpStr($this->req('tpeSequence')));
 
                 if ($tpe->update($id))
-                    NV_View::admin_notices('Запись успешно обновлена', 'info');
+                    nvHtml::admin_notices('Запись успешно обновлена', 'info');
                 else
-                    NV_View::admin_notices('Не удалось обновить запись');
+                    nvHtml::admin_notices('Не удалось обновить запись');
                 // save, as new
             } else {
                 $tpe->setName($this->req("tpeName"));
@@ -91,9 +89,9 @@ class Controller_nvTpe extends nvController {
                 $tpe->setSequenceOfSign($this->cleanUpStr($this->req('tpeSequence')));
 
                 if ($tpe->save())
-                    NV_View::admin_notices('Запись успешно добавлена', 'info');
+                    nvHtml::admin_notices('Запись успешно добавлена', 'info');
                 else
-                    NV_View::admin_notices('Не удалось создать запись');
+                    nvHtml::admin_notices('Не удалось создать запись');
             }
         }
 
@@ -101,7 +99,7 @@ class Controller_nvTpe extends nvController {
     }
 
     public function action_delete() {
-        $tpe = new Model_nvTpe();
+        $tpe = nvModel::factory('nvTpe');
 
         $id = $this->req('id');
         $testId = $this->req('test_id');
@@ -109,9 +107,9 @@ class Controller_nvTpe extends nvController {
         if ($testId) {
             if ($id) {
                 if ($tpe->delete($id))
-                    NV_View::admin_notices('Запись успешно удалены', 'info');
+                    nvHtml::admin_notices('Запись успешно удалена', 'info');
                 else
-                    NV_View::admin_notices('Не удалось удалить запись');
+                    nvHtml::admin_notices('Не удалось удалить запись');
             }
         }
         $this->action_index();

@@ -10,7 +10,7 @@ Author URI: http://www.stellio.org.ua
 /**
  * Manage test statistics
  */
-class Controller_Statistic extends NV_Controller {
+class Controller_Statistic extends Controller_ContentTemplate {
 
 	public $view;
 

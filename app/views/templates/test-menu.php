@@ -4,7 +4,7 @@
 			<nav class="navbar navbar-inverse navbar-embossed" role="navigation">
 	            <div class="collapse navbar-collapse" id="navbar-collapse-01">
 	              <ul class="nav navbar-nav navbar-left">
-	              	<li><a class="ajax-call" href="admin.php?page=NV&action=edit&id=<?=$id;?>">Общие</a></li>
+	              	<li><a class="ajax-call" href="admin.php?page=NV&module=nvTest&action=edit&id=<?=$id;?>">Общие</a></li>
 			        <li><a class="ajax-call" href="admin.php?page=NV&module=nvSign&test_id=<?=$id;?>">Признаки</a></li>
 			        <li><a class="ajax-call" href="admin.php?page=NV&module=nvTpe&test_id=<?=$id;?>">ТПЭ</a></li>
 			        <li><a class="ajax-call" href="admin.php?page=NV&module=nvProfile&test_id=<?=$id;?>">Профили</a></li>
