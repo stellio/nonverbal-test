@@ -1,7 +1,7 @@
 <div class="wrap">
     <p></p>
     <a href="admin.php?page=NV&module=nvProfile&test_id=<?=$test->getId();?>" class="button-secondary ajax-call">Вернуться</a>
-    <form method="post" action="admin.php?page=NV&module=nvProfile&action=save" class="ajax-call">
+    <form method="post" action="admin.php?page=NV&module=nvProfile&call=save" class="ajax-call">
         <input type="hidden" value="<?=$test->getId();?>" name="test_id"/>
         <input type="hidden" value="<?=$profile->getId();?>" name="id"/>
         <input type="hidden" value="<?=$profile->getType();?>" name="type"/>

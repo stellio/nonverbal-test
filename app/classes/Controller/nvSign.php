@@ -96,11 +96,12 @@ class Controller_nvSign extends Controller_ContentTemplate {
 
 			$signsGroup->setTestId($testId);
 
-			if (!$type) {
-				exit;
-			}
+			// if (!$type) exit;
+
 			$signsGroup->setType($type);
 			// update signs 
+			// 
+			// if $groupId != 0
 			if ($groupId) {
 
 				$signsGroup->setId($groupId);

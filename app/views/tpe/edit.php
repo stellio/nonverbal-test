@@ -1,7 +1,7 @@
 <div class="wrap">
     <p></p>
     <a href="admin.php?page=NV&module=nvTpe&test_id=<?=$test->getId();?>" class="button-secondary ajax-call">Вернуться</a>
-    <form method="post" action="admin.php?page=NV&module=nvTpe&action=save" class="ajax-call">
+    <form method="post" action="admin.php?page=NV&module=nvTpe&call=save" class="ajax-call">
         <input type="hidden" value="<?=$test->getId();?>" name="test_id"/>
         <input type="hidden" value="<?=$tpe->getId();?>" name="id"/>
         <div id="poststuff">

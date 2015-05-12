@@ -271,9 +271,9 @@ jQuery(document).ready(function ($) {
 	$('a.ajax-call').live('click', function(e) {
 
 		e.preventDefault();
-		var action = $(this).attr("href");
+		var cmd = $(this).attr("href");
 
-		if (action.indexOf("delete") > -1) {
+		if (cmd.indexOf("delete") > -1) {
 			if (confirm("Вы действительно хотите удалить?")) {
 
 			} else {
@@ -283,7 +283,7 @@ jQuery(document).ready(function ($) {
 		}
 
 		tools.loadingMsg('show');
-		$.post(glob.ajaxurl, { action : 'nonverbal_test_menu_action', request: action}, function(result, status) {
+		$.post(glob.ajaxurl+ "?" + cmd, { action : 'nonverbal_test_menu_action'}, function(result, status) {
 
 			$('.nv-content').html(result);
 
@@ -320,13 +320,13 @@ jQuery(document).ready(function ($) {
 
 		e.preventDefault();
 		
-		var action = $(this).attr('action');
+		var cmd = $(this).attr('action');
 		var params = $(this).serialize();
 		// log(action+params);
-		action = action + '&' + params;
+		cmd = cmd + '&' + params;
 
 		tools.loadingMsg('show');
-		$.post(glob.ajaxurl, { action : 'nonverbal_test_menu_action', request: action}, function(result, status) {
+		$.post(glob.ajaxurl + "?" + cmd, { action : 'nonverbal_test_menu_action'}, function(result, status) {
 
 			$('.nv-content').html(result);
 

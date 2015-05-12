@@ -1,6 +1,6 @@
 <div class="wrap">
     <a href="admin.php?page=NV&module=nvSign&test_id=<?=$test->getId();?>" class="button-secondary ajax-call">Вернуться</a>
-    <form method="post" action="admin.php?page=NV&module=nvSign&action=save" class="ajax-call">
+    <form method="get" action="admin.php?page=NV&module=nvSign&call=save" class="ajax-call">
         <input type="hidden" value="<?=$test->getId();?>" name="test_id"/>
         <input type="hidden" value="<?=$signsGroup->getId();?>" name="id"/>
         <input type="hidden" value="<?=$signsGroup->getType();?>" name="type"/>

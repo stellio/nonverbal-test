@@ -29,7 +29,7 @@ class Core_Routing extends Core_Object
 
 
 		// get controller method name
-		$request = $_GET['action'];
+		$request = $_GET['call'];
 
 		if (!empty($request))
 			$actionName = 'action_' . $request;

@@ -70,9 +70,9 @@
                                  //   'action' => 'edit',
                                    // 'id' => $test->id
                                 //),
-                                FlatUi::button('admin.php?page=nvTest&action=edit&id'.$test->id, "Редактировать", array('class' => 'btn-xs'));
+                                FlatUi::button('admin.php?page=nvTest&call=edit&id'.$test->id, "Редактировать", array('class' => 'btn-xs'));
                             ?>
-                            <a href="admin.php?page=NV&module=nvTest&action=edit&id=<?=$test->id?>" class="btn btn-xs btn-default"><?=FlatUi::glyph('new')?></a>
+                            <a href="admin.php?page=NV&module=nvTest&call=edit&id=<?=$test->id?>" class="btn btn-xs btn-default"><?=FlatUi::glyph('new')?></a>
                           
                         </td>
                         <td>

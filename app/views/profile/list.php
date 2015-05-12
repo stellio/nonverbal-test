@@ -20,7 +20,7 @@
                         <td>
                             <?=nvHtml::link(array(
                                 'module' => 'nvProfile',
-                                'action' => 'edit',
+                                'call' => 'edit',
                                 'test_id' => $test->getId(),
                                 'id' => $profile->id,
                                 'type' => $profile->type
@@ -31,7 +31,7 @@
                             );?>
                             <?=nvHtml::link(array(
                                 'module' => 'nvProfile',
-                                'action' => 'delete',
+                                'call' => 'delete',
                                 'test_id' => $test->getId(),
                                 'id' => $profile->id,
                                 'type' => $profile->type
@@ -54,7 +54,7 @@
         <?php echo nvHtml::button(
             array(
                 'module' => 'nvProfile',
-                'action' => 'edit',
+                'call' => 'edit',
                 'test_id' => $test->getId(),
                 'type' => nvModel::TYPE_TPE
             ),
@@ -86,7 +86,7 @@
                         <td>
                             <?=nvHtml::link(array(
                                 'module' => 'nvProfile',
-                                'action' => 'edit',
+                                'call' => 'edit',
                                 'test_id' => $test->getId(),
                                 'id' => $profile->id,
                                 'type' => $profile->type
@@ -97,7 +97,7 @@
                             );?>
                             <?=nvHtml::link(array(
                                 'module' => 'nvProfile',
-                                'action' => 'delete',
+                                'call' => 'delete',
                                 'test_id' => $test->getId(),
                                 'id' => $profile->id,
                                 'type' => $profile->type
@@ -120,7 +120,7 @@
         <?php echo nvHtml::button(
             array(
                 'module' => 'nvProfile',
-                'action' => 'edit',
+                'call' => 'edit',
                 'test_id' => $test->getId(),
                 'type' => nvModel::TYPE_FUNCTIONAL
             ),

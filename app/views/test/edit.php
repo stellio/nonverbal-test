@@ -1,5 +1,5 @@
 <div class="wrap">
-	<form method="post" action="admin.php?page=NV&module=nvTest&action=save&id=<?=$test->getId();?>">
+	<form method="post" action="admin.php?page=NV&module=nvTest&call=save&id=<?=$test->getId();?>">
 		<div id="poststuff">
 			<div class="panel panel-success">
   				<div class="panel-heading">Название</div>

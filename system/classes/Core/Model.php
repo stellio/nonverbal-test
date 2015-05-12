@@ -18,6 +18,10 @@ class Core_Model extends Core_Object {
 	const TYPE_TPE = '1';
 	const TYPE_FUNCTIONAL = '2';
 
+	const TYPE_NEW = 'new';
+	const TYPE_EXISTS = 'exists';
+	const TYPE_REMOVE = 'remove';
+
 
 	/**
 	 * Pointer for wordpress db processor class

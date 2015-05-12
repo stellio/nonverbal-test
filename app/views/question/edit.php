@@ -11,7 +11,7 @@
 	</div>
 	<!-- end of cloneable block -->
 
-	<form method="post" action="admin.php?page=NV&module=nvQuestion&action=save&id=<?=$question->getId();?>" class="ajax-call">
+	<form method="post" action="admin.php?page=NV&module=nvQuestion&call=save&id=<?=$question->getId();?>" class="ajax-call">
 		<input type="hidden" value="<?=$test->getId();?>" name="test_id"/>
 		<div id="poststuff">
 			<div class="postbox">

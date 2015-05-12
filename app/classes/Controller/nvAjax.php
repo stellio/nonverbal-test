@@ -93,27 +93,7 @@ class Controller_nvAjax extends nvController {
 
 	public function testMenuAction() {
 
-		
-		$request = urldecode($this->req('request'));
-
-		echo $request;
-
-		$request = str_replace("admin.php?", "", $request);
-
-		$requestParts = split("&", $request);
-
-		// print_r($requestParts);
-
-		foreach ($requestParts as $part) {
-			
-			$name_value = split('=', $part);
-
-			if (count($name_value) != 0) {
-				$_GET[$name_value[0]] = $name_value[1];
-			}
-		}
 		nvRouting::execute();
-
 		die();
 	}
 

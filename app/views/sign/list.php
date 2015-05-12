@@ -19,7 +19,7 @@
                     <td>
                         <?=nvHtml::link(array(
                                 'module' => 'nvSign',
-                                'action' => 'edit',
+                                'call' => 'edit',
                                 'test_id' => $test->getId(),
                                 'id' => $group->getId(),
                                 'type' => $group->getType()
@@ -30,7 +30,7 @@
                         );?>
                         <?=nvHtml::link(array(
                                 'module' => 'nvSign',
-                                'action' => 'delete',
+                                'call' => 'delete',
                                 'test_id' => $test->getId(),
                                 'id' => $group->getId(),
                                 'type' => $group->getType()
@@ -53,7 +53,7 @@
         <?=nvHtml::button(
             array(
                 'module' => 'nvSign',
-                'action' => 'edit',
+                'call' => 'edit',
                 'test_id' => $test->getId(),
                 'type' => nvModel::TYPE_TPE
             ),
@@ -84,7 +84,7 @@
                         <td>
                             <?=nvHtml::link(array(
                                 'module' => 'nvSign',
-                                'action' => 'edit',
+                                'call' => 'edit',
                                 'test_id' => $test->getId(),
                                 'id' => $group->getId(),
                                 'type' => $group->getType()
@@ -95,7 +95,7 @@
                             );?>
                             <?=nvHtml::link(array(
                                 'module' => 'nvSign',
-                                'action' => 'delete',
+                                'call' => 'delete',
                                 'test_id' => $test->getId(),
                                 'id' => $group->getId(),
                                 'type' => $group->getType()
@@ -118,7 +118,7 @@
         <?=nvHtml::button(
             array(
                 'module' => 'nvSign',
-                'action' => 'edit',
+                'call' => 'edit',
                 'test_id' => $test->getId(),
                 'type' => nvModel::TYPE_FUNCTIONAL
             ),

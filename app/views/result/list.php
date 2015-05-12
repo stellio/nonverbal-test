@@ -1,6 +1,6 @@
 <div class="wrap">
     <p></p>
-    <a class="button-secondary ajax-call" href="admin.php?page=NV&module=nvResult&action=add&test_id=<?=$test->getId();?>">Добавить результат</a>
+    <a class="button-secondary ajax-call" href="admin.php?page=NV&module=nvResult&call=add&test_id=<?=$test->getId();?>">Добавить результат</a>
     <p></p>
     <table class="wp-list-table widefat" id="">
         <thead>
@@ -29,7 +29,7 @@
                         <td>
                             <?=nvHtml::link(array(
                                 'module' => 'nvResult',
-                                'action' => 'edit',
+                                'call' => 'edit',
                                 'test_id' => $test->getId(),
                                 'id' => $result->id
                             ),
@@ -39,7 +39,7 @@
                             );?>
                             <?=nvHtml::link(array(
                                 'module' => 'nvResult',
-                                'action' => 'delete',
+                                'call' => 'delete',
                                 'test_id' => $test->getId(),
                                 'id' => $result->id
                             ),
@@ -58,5 +58,5 @@
         </tbody>
     </table>
     <br>
-    <a class="button-secondary ajax-call" href="admin.php?page=NV&module=nvResult&action=add&test_id=<?=$test->getId();?>">Добавить результат</a>
+    <a class="button-secondary ajax-call" href="admin.php?page=NV&module=nvResult&call=add&test_id=<?=$test->getId();?>">Добавить результат</a>
 </div>

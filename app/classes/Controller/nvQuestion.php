@@ -12,9 +12,7 @@ Author URI: http://www.stellio.org.ua
  */
 class Controller_nvQuestion extends Controller_ContentTemplate {
 	
-	const TYPE_NEW = 'new';
-	const TYPE_EXISTS = 'exists';
-	const TYPE_REMOVE = 'remove';
+	
 	public $view;
 	public $testId = '';
 

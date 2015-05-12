@@ -1,7 +1,7 @@
 <div class="wrap">
 	<p></p>
 	<a class="button-secondary ajax-call" href="admin.php?page=NV&module=nvResult&test_id=<?=$test->getId();?>">Вернуться</a>
-	<form method="post" action="admin.php?page=NV&module=nvResult&action=save&id=<?php echo $result->getId(); ?>" class="ajax-call">
+	<form method="post" action="admin.php?page=NV&module=nvResult&call=save&id=<?php echo $result->getId(); ?>" class="ajax-call">
 <!--	<input type="submit" name="template" class="button-primary" id="treetest-result-save" value="Сохранить">-->
 	<input type="hidden" value="<?=$test->getId();?>" name="test_id"/>
 		<div id="poststuff">

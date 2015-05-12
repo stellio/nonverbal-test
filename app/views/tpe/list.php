@@ -20,7 +20,7 @@
                                 <td>
                                     <?=nvHtml::link(array(
                                         'module' => 'nvTpe',
-                                        'action' => 'edit',
+                                        'call' => 'edit',
                                         'test_id' => $test->getId(),
                                         'id' => $tpe->id
                                     ),
@@ -30,7 +30,7 @@
                                     );?>
                                     <?=nvHtml::link(array(
                                         'module' => 'nvTpe',
-                                        'action' => 'delete',
+                                        'call' => 'delete',
                                         'test_id' => $test->getId(),
                                         'id' => $tpe->id
                                     ),
@@ -52,7 +52,7 @@
                 <?php echo nvHtml::button(
                     array(
                         'module' => 'nvTpe',
-                        'action' => 'edit',
+                        'call' => 'edit',
                         'test_id' => $test->getId()
                     ),
                     "Добавить",
