@@ -45,7 +45,7 @@
                 <?php } ?>
             <?php } else { ?>
                 <tr>
-                    <td colspan="6">Признаков пока нет</td>
+                    <td colspan="6">Профилей пока нет</td>
                 </tr>
             <?php } ?>
             </tbody>
@@ -111,7 +111,7 @@
                 <?php } ?>
             <?php } else { ?>
                 <tr>
-                    <td colspan="6">Признаков пока нет</td>
+                    <td colspan="6">Профилей пока нет</td>
                 </tr>
             <?php } ?>
             </tbody>

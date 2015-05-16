@@ -13,6 +13,7 @@
                     <p></p>
                     <input type="text" value="<?=$signsGroup->firstPart->getName();?>" name="signs[1][name]" placeholder="имя признака"/>
                     (<input type="text" value="<?=$signsGroup->firstPart->getCode();?>" name="signs[1][code]" placeholder="код" id="treetest-sign-value" />)
+                    -
                     <input type="text" value="<?=$signsGroup->secondPart->getName();?>" name="signs[2][name]" placeholder="имя признака"/>
                     (<input type="text" value="<?=$signsGroup->secondPart->getCode();?>" name="signs[2][code]" placeholder="код" id="treetest-sign-value"/>)
                 </div>

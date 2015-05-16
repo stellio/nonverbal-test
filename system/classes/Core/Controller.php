@@ -101,5 +101,6 @@ class Core_Controller extends Core_Object {
 	public function cleanUpStr($string) {
 		return strtoupper(trim($string));
 	}
+
 }
 ?>

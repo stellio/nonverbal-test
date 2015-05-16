@@ -89,6 +89,20 @@ class Model_nvSign extends Core_Model {
 		}
 	}
 
+	public function loadByTestId($testId) {
+
+		$result = array();
+
+		if ($testId) {
+
+			$query = 'SELECT * FROM ' . $this->_tableSigns . ' WHERE test_id=' . $testId;
+			$result = $this->_db->get_results($query);
+
+		}
+		return $result;
+
+	}
+
 	public function update($id) {
 
 		$id = (int)$id;

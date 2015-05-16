@@ -82,6 +82,18 @@ jQuery(document).ready(function ($) {
 		});
 	}
 	
+
+	// FlatUI
+	function FlatUI_init() {
+
+		// select
+		$("select").select2({dropdownCssClass: 'dropdown-inverse'});
+
+		// tags input
+		$(".tagsinput").tagsinput();
+	}
+
+
 	// 
 	// Test Operation
 	// 
@@ -258,8 +270,13 @@ jQuery(document).ready(function ($) {
 	function tinyMCE_init(){
 		 // quicktags({id : 'text'});
 		  tinyMCE.init({
-    		skin : "simple",
-	        mode:"textareas"
+	        selector: "textarea",
+	        // toolbar1: 'bold,italic,strikethrough,bullist,numlist,blockquote,hr,alignleft,aligncenter,alignright,link,unlink,wp_more,spellchecker,wp_fullscreen,wp_adv',
+	        // toolbar2: 'formatselect,underline,alignjustify,forecolor,pastetext,removeformat,charmap,outdent,indent,undo,redo,wp_help',
+		  	// keep_styles: true,
+		  	skin : 'wp_theme',
+	        
+
     });
     		// other options here
   // });
@@ -287,15 +304,15 @@ jQuery(document).ready(function ($) {
 
 			$('.nv-content').html(result);
 
+			FlatUI_init();
+
+
 			if ( $( "textarea#text" ).length ) {
  
  				tinyMCE_init();
     			alert("textarea exists");
  
 			}
-
-
-
 
 			// tinymce.init(tinyMCEPreInit.mceInit['text']);
 
@@ -329,6 +346,8 @@ jQuery(document).ready(function ($) {
 		$.post(glob.ajaxurl + "?" + cmd, { action : 'nonverbal_test_menu_action'}, function(result, status) {
 
 			$('.nv-content').html(result);
+
+			FlatUI_init();
 
 			if (status == 'success') {
 				tools.loadingMsg('hide');

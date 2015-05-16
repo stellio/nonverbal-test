@@ -29,7 +29,7 @@
 				<h3 class="hndle">Содержимое вопроса</h3>
 				<div class="inside">
 					<?php
-						wp_editor($question->getText(), "text", array('textarea_rows' => 5));
+						wp_editor($question->getText(), "text", array('textarea_rows' => 5, 'quicktags' => false));
 					?>
 				</div>
 			</div>

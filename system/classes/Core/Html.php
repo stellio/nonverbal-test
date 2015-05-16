@@ -215,9 +215,11 @@ class Core_Html extends Core_Object {
 
 	public static function admin_notices($msg, $type = 'error') {
 		if($type === 'info')
-			echo '<div class="updated"><p><strong>'.$msg.'</strong></p></div>';
+			// echo '<div class="updated"><p><strong>'.$msg.'</strong></p></div>';
+			echo '<div class="alert alert-success" role="alert">' .$msg. '</div>';
 		else
-			echo '<div class="error"><p><strong>'.$msg.'</strong></p></div>';
+			// echo '<div class="error"><p><strong>'.$msg.'</strong></p></div>';
+			echo '<div class="alert alert-danger" role="alert">'. $msg.'</div>';
 	}
 
 	public static function shorten($val) {
@@ -235,5 +237,16 @@ class Core_Html extends Core_Object {
 
         $result = ($key == $type) ? 'selected="selected"' : '';
         return $result;
+    }
+
+    public static function options($sings, $selected = array()) {
+
+    	foreach ($sings as $item) {
+    		
+    		if (in_array($item->code, $selected))
+    			echo sprintf('<option value="%s" selected>%s (%s)</option>', $item->code, $item->code, $item->name);
+    		else
+    			echo sprintf('<option value="%s">%s (%s)</option>', $item->code, $item->code, $item->name);
+    	}
     }
 }

@@ -16,9 +16,17 @@
                     <p></p>
                     <input type="text" value="<?=$profile->getName();?>" name="profileName" placeholder="имя профиля" class="regular-text" />
                     (<input type="text" value="<?=$profile->getCode();?>" name="profileCode" placeholder="код" id="treetest-profile-value" />) =
-                    <input type="text" value="<?=$profile->getSequenceOfSign();?>" name="profileSequence" placeholder="последовательность признаков" class="regular-text" />
+                    <!-- <input type="text" value="<?//$profile->getSequenceOfSign();?>" name="profileSequence" placeholder="последовательность признаков" class="regular-text" /> -->
+                    </p>
+                    Последовательности признаков:
+                    </p>
+                    <select name="profileSequence[]" multiple="multiple" class="form-control multiselect multiselect-info">
+                        <?=nvHtml::options($signs, $selected);?>
+                    </select>
                 </div>
             </div>
+
+          
         </div>
         <input type="submit" class="button-primary" id="treetest-sign-save" value="Сохранить">
     </form>
