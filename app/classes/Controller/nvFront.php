@@ -216,7 +216,7 @@ class Controller_nvFront extends Controller_FrontendTemplate {
 				$structure = array();
 				$structure = $root;
 
-				Controller_nvRelation::relationWalk($root->id, $relation_rows, &$subElements);
+				$subElements =  Controller_nvRelation::relationWalk($root->id, $relation_rows, $subElements);
 				$structure->childs = $subElements;
 				$relationList[] = $structure;
 			}
