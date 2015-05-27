@@ -69,5 +69,18 @@ class Controller_NV extends Controller_BackendTemplate  {
 
 		$this->template->content = $view->bind('tests', $test->getTestList());
 	}
+
+	public function action_delete() {
+
+		$test = nvModel::factory('nvTest');
+		
+		if (isset($_GET['id']) && $_GET['id'] != 0) {
+
+			$test->delete($_GET['id']);
+				
+		}
+
+		$this->action_index();
+	}
 }
 ?>

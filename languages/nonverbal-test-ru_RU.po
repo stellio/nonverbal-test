@@ -1,62 +1,61 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WP TreeTest 0.1\n"
-"POT-Creation-Date: 2015-04-02 16:37+0200\n"
-"PO-Revision-Date: 2015-04-02 16:41+0200\n"
+"POT-Creation-Date: 2015-05-27 22:11+0200\n"
+"PO-Revision-Date: 2015-05-27 22:15+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.7.3\n"
+"X-Generator: Poedit 1.7.5\n"
 "X-Poedit-Basepath: .\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __\n"
-"X-Poedit-SearchPath-0: ../includes\n"
+"X-Poedit-SearchPath-0: ../app\n"
 
-#: ../includes/controller/Controller_Front.php:435
+#: ../app/classes/Controller/nvFront.php:555
 msgid "TPE"
 msgstr "ТПЭ"
 
-#: ../includes/controller/Controller_Front.php:436
+#: ../app/classes/Controller/nvFront.php:556
 msgid "Functional"
 msgstr "Функциональный"
 
-#: ../includes/controller/Controller_Front.php:437
-#: ../includes/view/View_Front.php:86
+#: ../app/classes/Controller/nvFront.php:557 ../app/views/front/test.php:69
 msgid "Repeat testing"
 msgstr "Повторить тестирование"
 
-#: ../includes/controller/Controller_Front.php:438
+#: ../app/classes/Controller/nvFront.php:558
 msgid "Subtype TPE is not found. It is recommended to repeat the test again."
 msgstr "Подтип ТПЭ не определен. Рекомендую повторить тест еще раз."
 
-#: ../includes/controller/Controller_Front.php:439
+#: ../app/classes/Controller/nvFront.php:559
 msgid ""
 "The leading type TPE is not defined. It is recommended to repeat the test "
 "again."
 msgstr "Доминирующий ТПЭ не определен. Рекомендую повторить тест еще раз."
 
-#: ../includes/controller/Controller_Front.php:440
+#: ../app/classes/Controller/nvFront.php:560
 msgid "Can't Load Tpe Quadras"
 msgstr "Не удалось загрузить ТПЭ квадры"
 
-#: ../includes/controller/Controller_Front.php:441
+#: ../app/classes/Controller/nvFront.php:561
 msgid "Error! Failed to load the result"
 msgstr "Ошибка! Не удалось загрузить результат"
 
-#: ../includes/view/View_Front.php:32
+#: ../app/views/front/test.php:10
 msgid "Testing completed!"
 msgstr "Тестирование завершено"
 
-#: ../includes/view/View_Front.php:33
+#: ../app/views/front/test.php:11
 msgid "Congratulations!"
 msgstr "Поздравляем!"
 
-#: ../includes/view/View_Front.php:34
+#: ../app/views/front/test.php:12
 msgid ""
 "To view results please, answer the following questions for the confidential "
 "collection of test statistics"
@@ -64,19 +63,23 @@ msgstr ""
 "Для просмотра результатов пожалуйста, ответьте на следующие вопросы для "
 "конфиденциального сбора статистики"
 
-#: ../includes/view/View_Front.php:42
+#: ../app/views/front/test.php:20
 msgid "Graphs of the distribution of signs"
 msgstr "Графики распределения признаков"
 
-#: ../includes/view/View_Front.php:48
+#: ../app/views/front/test.php:26
 msgid "TPE graphics domination"
 msgstr "Графики доминации ТПЭ"
 
-#: ../includes/view/View_Front.php:81
+#: ../app/views/front/test.php:32
+msgid "Functionality profiles domination"
+msgstr "График доминации функционального профиля"
+
+#: ../app/views/front/test.php:64
 msgid "Start testing"
 msgstr "Начать тестирование"
 
-#: ../includes/view/View_Front.php:93
+#: ../app/views/front/test.php:76
 msgid ""
 "Please, answer the following questions for the confidential collection of "
 "test statistics:"
@@ -84,75 +87,75 @@ msgstr ""
 "Пожалуйста, ответьте на следующие вопросы для конфиденциального сбора "
 "статистики:"
 
-#: ../includes/view/View_Front.php:97
+#: ../app/views/front/test.php:80
 msgid "How do you type yourself?"
 msgstr "К какому типу вы себя относите? "
 
-#: ../includes/view/View_Front.php:101
+#: ../app/views/front/test.php:84 ../app/views/front/test.php:107
 msgid "(ILI) Honore de Balzac"
 msgstr "(ИЛИ) Бальзак"
 
-#: ../includes/view/View_Front.php:102
+#: ../app/views/front/test.php:85 ../app/views/front/test.php:108
 msgid "(SLI) Jean Gabin"
 msgstr "(СЛИ) Габен"
 
-#: ../includes/view/View_Front.php:103
+#: ../app/views/front/test.php:86 ../app/views/front/test.php:109
 msgid "(EIE) Hamlet"
 msgstr "(ЭИЭ) Гамлет"
 
-#: ../includes/view/View_Front.php:104
+#: ../app/views/front/test.php:87 ../app/views/front/test.php:110
 msgid "(IEE) Aldous Huxley"
 msgstr "(ИЭЭ) Гексли"
 
-#: ../includes/view/View_Front.php:105
+#: ../app/views/front/test.php:88 ../app/views/front/test.php:111
 msgid "(LSI) Gorky"
 msgstr "(ЛСИ) Горький"
 
-#: ../includes/view/View_Front.php:106
+#: ../app/views/front/test.php:89 ../app/views/front/test.php:112
 msgid "(ESE) Victor Hugo"
 msgstr "(ЭСЭ) Гюгю"
 
-#: ../includes/view/View_Front.php:107
+#: ../app/views/front/test.php:90 ../app/views/front/test.php:113
 msgid "(LIE) Jack London"
 msgstr "(ЛИЭ) Джек Лондон"
 
-#: ../includes/view/View_Front.php:108
+#: ../app/views/front/test.php:91 ../app/views/front/test.php:114
 msgid "(ILE) Don Quixote"
 msgstr "(ИЛЭ) Дон Кихот"
 
-#: ../includes/view/View_Front.php:109
+#: ../app/views/front/test.php:92 ../app/views/front/test.php:115
 msgid "(EII) Fyodor Dostoyevsky"
 msgstr "(ЭИИ) Достоевский"
 
-#: ../includes/view/View_Front.php:110
+#: ../app/views/front/test.php:93 ../app/views/front/test.php:116
 msgid "(ESI) Dreiser"
 msgstr "(ЭСИ) Драйзер"
 
-#: ../includes/view/View_Front.php:111
+#: ../app/views/front/test.php:94 ../app/views/front/test.php:117
 msgid "(SEI) Dumas"
 msgstr "(СЭИ) Дюма"
 
-#: ../includes/view/View_Front.php:112
+#: ../app/views/front/test.php:95 ../app/views/front/test.php:118
 msgid "(IEI) Sergei Yesenin"
 msgstr "(ИЭИ) Есенин"
 
-#: ../includes/view/View_Front.php:113
+#: ../app/views/front/test.php:96 ../app/views/front/test.php:119
 msgid "(SLE) Georgy Zhukov"
 msgstr "(СЛЭ) Жуков"
 
-#: ../includes/view/View_Front.php:114
+#: ../app/views/front/test.php:97 ../app/views/front/test.php:120
 msgid "(SEE) Napoleon I."
 msgstr "(СЭЭ) Наполеон"
 
-#: ../includes/view/View_Front.php:115
+#: ../app/views/front/test.php:98 ../app/views/front/test.php:121
 msgid "(LII) Maximilien Robespierre"
 msgstr "(ЛИИ) Робеспьер"
 
-#: ../includes/view/View_Front.php:116
+#: ../app/views/front/test.php:99 ../app/views/front/test.php:122
 msgid "(LSE) Stierlitz"
 msgstr "(ЛСЭ) Штирлиц"
 
-#: ../includes/view/View_Front.php:121
+#: ../app/views/front/test.php:104
 msgid ""
 "If you are not sure, please, indicate another type(s) as a most probable "
 "option."
@@ -160,55 +163,55 @@ msgstr ""
 "Если вы не уверены, пожалуйста, укажите другой тип (ы) как наиболее "
 "вероятный вариант."
 
-#: ../includes/view/View_Front.php:127
+#: ../app/views/front/test.php:127
 msgid "On what basis did you decide about your type?"
 msgstr "На каком основании Вы определили свой тип?"
 
-#: ../includes/view/View_Front.php:130
+#: ../app/views/front/test.php:130
 msgid "Test results"
 msgstr "Результаты тестов"
 
-#: ../includes/view/View_Front.php:131
+#: ../app/views/front/test.php:131
 msgid "Forum’s discussion"
 msgstr "Обсуждение на форуме"
 
-#: ../includes/view/View_Front.php:132
+#: ../app/views/front/test.php:132
 msgid "Friend’s help"
 msgstr "Помощь друга"
 
-#: ../includes/view/View_Front.php:133
+#: ../app/views/front/test.php:133
 msgid "Consultancy"
 msgstr "Помощь консультанта"
 
-#: ../includes/view/View_Front.php:134
+#: ../app/views/front/test.php:134
 msgid "Other"
 msgstr "Другое"
 
-#: ../includes/view/View_Front.php:138
+#: ../app/views/front/test.php:138
 msgid "What is your age?"
 msgstr "Ваш возраст?"
 
-#: ../includes/view/View_Front.php:142
+#: ../app/views/front/test.php:142
 msgid "What is your gender?"
 msgstr "Ваш пол?"
 
-#: ../includes/view/View_Front.php:144
+#: ../app/views/front/test.php:144
 msgid "Male"
 msgstr "Mужчина"
 
-#: ../includes/view/View_Front.php:145
+#: ../app/views/front/test.php:145
 msgid "Female"
 msgstr "Женщина"
 
-#: ../includes/view/View_Front.php:149
+#: ../app/views/front/test.php:149
 msgid "What is your name or nickname?"
 msgstr "Ваше имя или ник?"
 
-#: ../includes/view/View_Front.php:154
+#: ../app/views/front/test.php:154
 msgid "Please review your responses and click submit to view results."
 msgstr "Пожалуйста, проверьте ответы  и отошлите их для получения результата"
 
-#: ../includes/view/View_Front.php:157
+#: ../app/views/front/test.php:157
 msgid "Submit"
 msgstr "Отправить"
 

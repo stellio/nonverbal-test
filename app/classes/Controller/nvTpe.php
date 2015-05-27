@@ -45,20 +45,31 @@ class Controller_nvTpe extends Controller_ContentTemplate {
     public function action_edit() {
         $test = nvModel::factory('nvTest');
         $tpe = nvModel::factory('nvTpe');
+        $sign = nvModel::factory('nvSign');
         $view = nvView::factory('tpe/edit');
+
+        $selected = array();
+        $signs = array();
+
 
         $id = $this->req('id');
         $testId = $this->req('test_id');
 
         if ($testId) {
             $test->loadById($testId);
+            $signs = $sign->loadByTestId($testId);
+
             // if set id load tpe
             if ($id) {
                 $tpe->loadById($id);
+                $selected = split(',', str_replace(' ', '', $tpe->getSequenceOfSign()));
             }
         }
 
-        $this->template->content = $view->bind('test', $test)->bind('tpe', $tpe);
+        $this->template->content = $view->bind('test', $test)
+                                        ->bind('tpe', $tpe)
+                                        ->bind('signs', $signs)
+                                        ->bind('selected', $selected);
     }
 
     /**
@@ -76,7 +87,9 @@ class Controller_nvTpe extends Controller_ContentTemplate {
                 $tpe->loadById($id);
                 $tpe->setName($this->req('tpeName'));
                 $tpe->setCode($this->cleanUpStr($this->req('tpeCode')));
-                $tpe->setSequenceOfSign($this->cleanUpStr($this->req('tpeSequence')));
+
+                if ($this->req('tpeSequence'))
+                    $tpe->setSequenceOfSign(join(',', $this->req('tpeSequence')));
 
                 if ($tpe->update($id))
                     nvHtml::admin_notices('Запись успешно обновлена', 'info');
@@ -86,7 +99,9 @@ class Controller_nvTpe extends Controller_ContentTemplate {
             } else {
                 $tpe->setName($this->req("tpeName"));
                 $tpe->setCode($this->cleanUpStr($this->req('tpeCode')));
-                $tpe->setSequenceOfSign($this->cleanUpStr($this->req('tpeSequence')));
+
+                if ($this->req('tpeSequence'));
+                    $tpe->setSequenceOfSign(join(',', $this->req('tpeSequence')));
 
                 if ($tpe->save())
                     nvHtml::admin_notices('Запись успешно добавлена', 'info');

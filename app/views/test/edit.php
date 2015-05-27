@@ -1,30 +1,25 @@
-<div class="wrap">
-	<form method="post" action="admin.php?page=NV&module=nvTest&call=save&id=<?=$test->getId();?>">
-		<div id="poststuff">
-			<div class="panel panel-success">
-  				<div class="panel-heading">Название</div>
+<div>
+	<form method="post" class="ajax-call" action="admin.php?page=NV&module=nvTestParam&call=save&id=<?=$test->getId();?>">
+			<div class="panel panel-default">
+  				<div class="panel-heading">
+  					<h3 class="panel-title">Название</h3>
+  				</div>
   				<div class="panel-body">
-    					<input name="name" id="treetest-test-name" type="text" class="regular-text" value="<?=$test->getName();?>">
+    					<input name="name" id="treetest-test-name" type="text" class="form-control" value="<?=$test->getName();?>">
   				</div>
 			</div>
-			<div class="postbox">
-				<h3 class="hndle">Опции</h3>
-				<div class="inside">
-					<input type="checkbox" id="title_hidden" value="1" name="onlyregistered" <?=$test->isRegOnly() ? 'checked="checked"' : '' ?> >Тест могу прохожить только зарегистрированые
-					<p></p>
-					<input type="checkbox" id="title_hidden" value="1" name="debugmode" <?=$test->isDebug() ? 'checked="checked"' : '' ?> >Режим отладки (показывает график доминации признаков во время прохождения теста)
+			
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Описание</h3>
 				</div>
-			</div>
-			<div class="postbox">
-				<h3 class="hndle">Описание</h3>
-				<div class="inside">
+				<div class="panel-body">
 					<?php
-						wp_editor($test->getDescription(), "description");
+						wp_editor($test->getDescription(), "text", array('textarea_rows' => 5, 'quicktags' => false));
 					?>
 				</div>
 			</div>
 
-		</div>
-		<input type="submit" name="template" class="button-primary" id="treetest-save-test" value="Save">
+		<input type="submit" name="template" class="btn btn-info" id="treetest-save-test" value="Сохранить">
 	</form>
 </div>

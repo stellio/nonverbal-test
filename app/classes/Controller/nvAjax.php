@@ -46,6 +46,10 @@ class Controller_nvAjax extends nvController {
 		add_action('wp_ajax_nonverbal_test_menu_action', array($this, 'testMenuAction'));
 		add_action('wp_ajax_nopriv_nonverbal_test_menu_action', array($this, 'testMenuAction'));
 
+		// Test Settings
+		add_action('wp_ajax_nonverbal_test_settings', array($this, 'testSettings'));
+		add_action('wp_ajax_nopriv_nonverbal_test_settings', array($this, 'testSettings'));
+
 	}
 
 	/**
@@ -64,6 +68,15 @@ class Controller_nvAjax extends nvController {
 
 		$front = new Controller_nvFront();
 		$front->ajaxGetResult();
+	}
+
+	/**
+	 * Change test settings
+	 */
+	public function testSettings() {
+
+		$front = new Controller_nvTest();
+		$front->ajax_settings();
 	}
 
 	/**

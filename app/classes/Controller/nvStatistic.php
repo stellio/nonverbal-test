@@ -10,7 +10,7 @@ Author URI: http://www.stellio.org.ua
 /**
  * Manage test statistics
  */
-class Controller_Statistic extends Controller_ContentTemplate {
+class Controller_nvStatistic extends Controller_WithoutMenuTemplate {
 
 	public $view;
 
@@ -22,12 +22,13 @@ class Controller_Statistic extends Controller_ContentTemplate {
 	 * Show full statistics for test
 	 */
 	public function action_index() {
-
+		
+		$test = nvModel::factory('nvTest');
+		$result = nvModel::factory('nvResult');
+		$statistic = nvModel::factory('nvStatistic');
+		$view = nvView::factory('statistic/list');
+		
 		$statistics = array();
-		$test = new Model_Test();
-		$result = new Model_Result();
-		$statistic = new Model_Statistic();
-		$this->view = new View_StatisticList();
 
 		$id = $this->req('test_id');
 
@@ -36,16 +37,14 @@ class Controller_Statistic extends Controller_ContentTemplate {
 			$statistics = $statistic->getListByTestId($id);
 		}
 
-		$this->view->test = $test;
-		$this->view->result = $result;
-		$this->view->statistics = $statistics;
-
-		$this->view->show();
+		$this->template->content = $view->bind('test', $test)
+										->bind('result', $result)
+										->bind('statistics', $statistics);
 	}
 
 	public function ajax_removeResult() {
 
-		$statistic = new Model_Statistic();
+		$statistic = nvModel::factory('nvStatistic');
 		$response = 0;
 		$id = $this->req('id');
 

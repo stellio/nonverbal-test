@@ -123,16 +123,12 @@ jQuery(document).ready(function ($) {
 		};
 	}();
 
-	/**
-	 *
-	 *
-	 *
-	 */
-
-
 
 	// Enums
-	var Type = { tpe: "1", func: "2"};
+	var TYPES = { tpe: "1", func: "2"};
+
+	// Objects
+	var leadTpe = { first: "", second: ""};
 
 	// Globals
 	var glob = localize;
@@ -143,146 +139,200 @@ jQuery(document).ready(function ($) {
 		console.log(msg);
 	};
 
+	var msg = function(text, info) {
+		console.log(text + " " + info);
+	};
+
+	// tools
 	function getTestId() {
 		return $('.treetest').attr('id');
-	}
-	/*
-	 SignGroup Model
-	 */
-	function MSignGroup(shortName, gType) {
-		this.shortName = shortName;
-		this.gType = gType;
-		this.firstSign = null;
-		this.secondSign = null;
-		this.observers = [];
-		this.isEqual = false;
-		this.leadSign = [];
-
-		this.addPoint = function(code) {
-			if (this.shortName.indexOf(code) != -1) {
-				if (this.firstSign.code == code) {
-					this.firstSign.points += 1;
-
-				} else if (this.secondSign.code == code) {
-					this.secondSign.points += 1;
-				}
-
-				/* check is point equal */
-				if (this.firstSign.points == this.secondSign.points)
-					this.isEqual = true;
-				else
-					this.isEqual = false;
-
-				/* find lead sign */
-				this.leadSign = []; // clear
-
-				if (this.firstSign.points < this.secondSign.points) {
-					this.leadSign.push(this.secondSign);
-				} else if (this.firstSign.points > this.secondSign.points) {
-					this.leadSign.push(this.firstSign);
-				} else {
-					this.leadSign.push(this.firstSign);
-					this.leadSign.push(this.secondSign);
-				}
-
-				this.notify();
-			}
-		};
-
-		this.notify = function() {
-			this.observers.forEach(function(observer) { observer.update(); })
-		};
-
-		this.addObserver = function(observer) {
-			this.observers.push(observer);
-		};
-	}
-
-	/*
-	 SignGroup View
-	 */
-	function VSignGroup(model, container) {
-		this.model = model;
-		this.conteiner = container;
-		this.fSize = 0;
-		this.sSize = 0;
-
-		this.countSize = function() {
-			var sizeRation = (model.firstSign.points + model.secondSign.points) / 100;
-			this.fSize = (model.firstSign.points != 0) ? model.firstSign.points / sizeRation: 0;
-			this.sSize = (model.secondSign.points != 0) ? model.secondSign.points / sizeRation : 0;
-		};
-
-		this.render = function () {
-			var group = "<div class='progress-bar progress-bar-info' style='float: left; width: "+this.fSize+"%; color: rgb(72, 85, 86); background-color: #ecf0f1;'>" +
-				this.fSize.toFixed(0) + "% - " + this.model.firstSign.name +"</div>" +
-				"<div class='progress-bar progress-bar-danger' style='float: right;width: "+this.sSize+"%; color: white;background-color: #7f8c8d;'>" +
-				this.sSize.toFixed(0) + "% - " + this.model.secondSign.name +"</div>" +
-				"<div style='clear: both;'></div>";
-			this.conteiner.html(group);
-		};
-
-		this.update = function() {
-			this.countSize();
-			this.render();
-		}
-	}
+	};
 
 	/**
-	 * Model Tpe
+	 *	Basic MVC classes
 	 */
-	function MTpe(code, name, components) {
-		this.componentList = [];
-		this.sequenceOfComponents = components;
-		this.code = code;
-		this.name = name;
-		this.points = 0;
+	
+	/* Model */
+	var Model = Class.extend({
 
-		this.connectSign = function(sign) {
-			this.componentList.push(sign);
-		};
+		init: function() {
+			this._observers = [];
+		},
 
-		this.countPoint = function() {
-			this.points = 0;
-			for (var i =0; i < this.componentList.length; i+=1) {
-				this.points += this.componentList[i].points;
-			}
-			return this.points;
+		addObserver : function(observer) {
+			this._observers.push(observer);
+		},
+
+		notify : function() {
+			for(var i = 0; i < this._observers.length; i += 1)
+				this._observers[i].update();
+		}	
+
+	});
+
+	/* View  */
+	var View = Class.extend({
+
+		init: function(model, view) {
+
+			this._model = model;
+			this._view = view;
+		},
+
+		update: function() {}
+	});
+
+	/* Controller */
+	var Controller = Class.extend({
+
+		init: function() {}
+	})
+
+	var Stack = Class.extend({
+
+		init: function() {
+
+			this._stack = [];
+		},
+
+		push: function(item) {
+
+			var exists = false;
+			// check if exists
+			for(var i=0; i < this._stack.length; i+=1)
+				if (item == this._stack[i])
+					exists = true;
+
+			if (!exists)
+				this._stack.push(item);
+		},
+
+		pop: function() {
+			return this._stack.pop();
+		},
+
+		peekLast: function() {
+
+			var item = false;
+			if (this._stack.length != 0)
+				item = this._stack[this._stack.length-1];
+
+			return item;
+
+		},
+
+		peekFirst: function() {
+			var item = false;
+
+			if (this._stack.length != 0)
+				item = this._stack[0];
+			return item;
+		},
+
+		size: function() {
+			return this._stack.length;
 		}
-	}
-
+	});
+	
 	/**
-	 * List of Tpe Models
+	 * Apps Classes
 	 */
-	function MTpeList() {
-		this.tpeList = [];
-		this.observers = [];
-		this.isLeadTpeFind = true;
-		this.isSubTpeFind = true;
+	
+	/* Models */
+	var mTpe = Model.extend({
 
-		this.addTpe = function(tpe) {
-			this.tpeList.push(tpe);
+		init: function(code, name, signs) {
+			this._super();
+
+			this._signList = [];
+			this._signsSequence = signs;
+			this._code = code;
+			this._name = name;
+			this._points = 0;
+
+		},
+
+		pushSign: function(sign) {
+			this._signList.push(sign);
+		},
+
+		addPoint: function() {
+
+			this._points += 1;
+			this.notify();
 		}
+	});
 
-		this.addObserver = function(observer) {
-			this.observers.push(observer);
-		}
+	var mTpeList = Model.extend({
 
-		this.notify = function() {
-			this.observers.forEach(function (observer) { observer.update();});
-		}
+		init: function() {
+			this._super();
 
-		this.countPoint = function() {
+			this._tpeList = [];
+			this._isLeadTpeFind = true;
+			this._isSubTpeFind = true;
+
+		},
+
+		addTpe: function(tpe) {
+			this._tpeList.push(tpe);
+			this.notify();
+		},
+
+		removeTpe: function(code) {
+
+			for(var i = 0; i < this._tpeList.length; i+=1) {
+				if (this._tpeList[i]._code == code)
+					this._tpeList.splice(i, 1);
+			}
+			this.notify();
+		},
+
+		addPoint: function(code) {
+
+			for(var i = 0; i < this._tpeList.length; i+=1) {
+				if (this._tpeList[i]._code == code) {
+					this._tpeList[i].addPoint();
+				}
+			}
+			this.notify();
+		},
+
+		countPoint: function() {
 			for (var i=0; i < this.tpeList.length; i+=1) {
-				this.tpeList[i].countPoint();
+				this._tpeList[i].countPoint();
 			}
-		}
+		},
 
-		this.findLeadTpe = function() {
-			/* clean */
+		findLastTpe: function() {
+
+			var	list = this._tpeList,
+				result = false;
+
+			/* sor list by ascending */
+			for (var i=0; i < list.length; i+=1)
+				for (var j=0; j < list.length - 1; j+=1)
+					if (list[j]._points > list[j+1]._points){
+						var temp = list[j];
+						list[j] = list[j+1];
+						list[j+1] = temp;
+					}
+
+			if (list.length > 1){
+				if (list[0]._points == list[1]._points)
+					result = false;
+				else
+					result = list[0]._code;
+			}
+
+			return result;
+		},
+
+		findLeadTpe: function() {
+		/* clean */
 
 			var bigestPoint = 0,
-				list = this.tpeList,
+				list = this._tpeList,
 				leadTpe = '',
 				subTpe = '';
 
@@ -296,7 +346,7 @@ jQuery(document).ready(function ($) {
 					}
 
 
-			// check if exist lead, but not present lead tpe with same points
+			// check if lead exists, but not present lead tpe with same points
 			if (list.length > 1)
 				if (list[0].points == list[1].points)
 					this.isLeadTpeFind = false;
@@ -314,440 +364,931 @@ jQuery(document).ready(function ($) {
 				subTpe = list[1].code;
 			}
 
-
 			return [leadTpe, subTpe];
-		};
+		},
 
+		getAllTpe: function() { return this._tpeList },
 
-		this.getAllTpe = function() { return this.tpeList };
-
-		this.update = function() {
+		update:	function() {
 			this.countPoint();
 			this.findLeadTpe();
+		}
+	});
+
+	var mSign = Model.extend({
+
+		init: function() {
+
+		}
+	});
+
+	var mSignGroup = Model.extend({
+
+		init: function(shortName, type) {
+			this._super();
+
+			this._shortName = shortName;
+			this._type = type;
+			this._firstSign = null;
+			this._secondSign = null;
+			this._isEqual = false;
+			this._leadSign = [];
+		},
+
+		addPoint: function(code) {
+			if (this._shortName.indexOf(code) != -1) {
+				if (this._firstSign.code == code) {
+					this._firstSign.points += 1;
+
+				} else if (this._secondSign.code == code) {
+					this._secondSign.points += 1;
+				}
+
+				/* check is point equal */
+				if (this._firstSign.points == this._secondSign.points)
+					this._isEqual = true;
+				else
+					this._isEqual = false;
+
+				/* find lead sign */
+				this._leadSign = []; // clear
+
+				if (this._firstSign.points < this._secondSign.points) {
+					this._leadSign.push(this._secondSign);
+				} else if (this._firstSign.points > this._secondSign.points) {
+					this._leadSign.push(this_firstSign);
+				} else {
+					this._leadSign.push(this_firstSign);
+					this._leadSign.push(this_secondSign);
+				}
+
+				this.notify();
+			}
+		}
+	});
+
+	var mProfile = Model.extend({
+
+		init: function(code, name, type, signs) {
+			this._super();
+
+			this._signList = [];
+			this._signsSequence = signs;
+			this._code = code;
+			this._name = name;
+			this._type = type;
+			this._points = 0;
+		},
+
+		connectSign: function(item) {
+			this._signList.push(item);
+		},
+
+		connectProfile: function(item) {
+			this._signList.push(item);
+		},
+
+		connectTpe: function(item) {
+			this._signList.push(item);
+		},
+
+		countPoint: function() {
+			this._points = 0;
+			for (var i =0; i < this._signList.length; i+=1) {
+				this._points += this._signList[i].points;
+			}
+			return this._points;
+		}
+	});
+
+	var mProfilePair = Model.extend({
+
+		init: function(){
+			this._super();
+
+			this._id = Math.floor((Math.random() * 10000) + 1);
+			this._type = null;
+			this._first = null;
+			this._second = null;
+			this._isEqual = false;
+			this._lead = null;
+		},
+
+		addPoint: function(code) {
+
+			if (this._first._code == code) {
+				this._first._points += 1;
+
+			} else if (this._second._code == code){
+				this._second._points += 1;
+			}
+
+			/* check is first and second part has equal points */
+			if (this._first._points == this._second._points)
+				this._isEqual = true;
+			else
+				this._isEqual = false;
+
+			/* find lead */
+			this._lead = null;
+
+			if (this._first._points < this._second._points) {
+				this._lead = this._second._code;
+			} else if (this._first._points > this._second._points)
+				this._lead = this._first._code;
+
 			this.notify();
 		}
-	}
+	})
 
-	/*
-	 Profile Model
-	 */
-	function MProfile(code, name, pType, sequence) {
-		this.signList = [];
-		this.sequenceOfSign = sequence;
-		this.code = code;
-		this.name = name;
-		this.pType = pType;
-		this.points = 0;
+	var mProfileList = Model.extend({
 
-		this.connectSign = function(sign) {
-			this.signList.push(sign);
-		};
+		init: function() {
+			this._super();
 
-		this.connectProfile = function(profile) {
-			this.signList.push(profile);
-		}
+			this._profiles = [];
+			this._leadTpeProfile = [];
+			this._leadFuncProfile = [];
+		},
 
-		this.connectTpe = function(item) {
-			this.signList.push(item);
-		}
+		addProfile: function(profile) {
+			this._profiles.push(profile);
+		},
 
-		this.countPoint = function() {
-			this.points = 0;
-			for (var i =0; i < this.signList.length; i+=1) {
-				this.points += this.signList[i].points;
-			}
-			return this.points;
-		}
-	}
-
-	/*
-	 Profiles Model
-	 */
-	function MProfiles() {
-		this.profiles = [];
-		this.observers = [];
-		this.leadTpeProfile = [];
-		this.leadFuncProfile = [];
-
-		this.addProfile = function(profile) {
-			this.profiles.push(profile);
-		}
-
-		this.addObserver = function(observer) {
-			this.observers.push(observer);
-		}
-
-		this.notify = function() {
-			this.observers.forEach(function (observer) { observer.update();});
-		}
-
-		this.countPoint = function() {
-			for (var i=0; i < this.profiles.length; i+=1) {
-				this.profiles[i].countPoint();
+		countPoint: function() {
+			for (var i=0; i < this._profiles.length; i+=1) {
+				this._profiles[i].countPoint();
 			}
 			this.findLeadTpeProfile();
 			this.findLeadFuncProfile();
-		}
+		},
 
-		this.findLeadTpeProfile = function() {
+		findLeadTpeProfile: function() {
 			/* clean */
-			this.leadTpeProfile = [];
+			this._leadTpeProfile = [];
 
-			var bigestPoint = 0;
-			var profile = null;
+			var bigestPoint = 0, 
+				profile = null;
 
 			/* find bigest tpe profile */
-			for (var i=0; i < this.profiles.length; i+=1){
-				if (this.profiles[i].pType == Type.tpe) {
-					if (this.profiles[i].points > bigestPoint){
-						profile = this.profiles[i];
+			for (var i=0; i < this._profiles.length; i+=1){
+				if (this._profiles[i]._type == TYPES.tpe) {
+					if (this._profiles[i].points > bigestPoint){
+						profile = this._profiles[i];
 						bigestPoint = profile.points;
 					}
 				}
 			}
 
 			/* wind other equal profiles to bigest profile */
-			for (var i=0; i < this.profiles.length; i+=1) {
-				if (this.profiles[i].pType == Type.tpe) {
-					if (this.profiles[i].points == bigestPoint) {
-						this.leadTpeProfile.push(this.profiles[i]);
+			for (var i=0; i < this._profiles.length; i+=1) {
+				if (this._profiles[i]._type == TYPES.tpe) {
+					if (this._profiles[i]._points == bigestPoint) {
+						this._leadTpeProfile.push(this._profiles[i]);
 					}
 				}
 			}
 
-			return this.leadTpeProfile;
-		};
+			return this._leadTpeProfile;
+		},
 
-		this.findLeadFuncProfile = function() {
+		findLeadFuncProfile: function() {
 
 			/* clean */
-			this.leadFuncProfile = [];
+			this._leadFuncProfile = [];
 
-			var bigestPoint = 0;
-			var profile = null;
+			var bigestPoint = 0,
+				profile = null;
 
 			/*  find bigest func profile */
-			for (var i=0; i < this.profiles.length; i+=1) {
-				if (this.profiles[i].pType == Type.func) {
-					if (this.profiles[i].points > bigestPoint){
-						profile = this.profiles[i];
+			for (var i=0; i < this._profiles.length; i+=1) {
+				if (this._profiles[i]._type == TYPES.func) {
+					if (this._profiles[i]._points > bigestPoint){
+						profile = this._profiles[i];
 						bigestPoint = profile.points;
 					}
 				}
 			}
 			/* find other equal profiles to bigest profile */
-			for (var i=0; i < this.profiles.length; i+=1) {
-				if (this.profiles[i].pType == Type.func) {
-					if (this.profiles[i].points == bigestPoint) {
-						this.leadFuncProfile.push(this.profiles[i]);
+			for (var i=0; i < this._profiles.length; i+=1) {
+				if (this._profiles[i]._type == TYPES.func) {
+					if (this._profiles[i]._points == bigestPoint) {
+						this._leadFuncProfile.push(this._profiles[i]);
 					}
 				}
 			}
-			return this.leadFuncProfile;
-		};
+			return this._leadFuncProfile;
+		},
 
-		this.update = function() {
+		update: function() {
 			this.countPoint();
 			this.notify();
 		}
-	}
+	});
 
-	/*
-	 	Tpe quadras view
-	 */
-	function VTpeList(model, block) {
-		this.model = model;
-		this.tpeBlock = block;
+	var mRelationNode = Model.extend({
 
-		this.update = function() {
-			//this.render();
-			//this.renderAll();
-			// this.renderAsBar();
-			this.renderAsColorBar();
+		init: function(code, childs) {
+			this._super();
+
+			this._code = ''
+			this._childs = childs;
+		},
+
+		setChilds: function(val) {
+			this._childs = val;
+		},
+
+		getChilds: function() {
+			return this._childs;
 		}
 
-		this.render = function() {
-			var view = '';
-			for (var i=0; i < this.model.leadTpe.length; i+=1) {
-				view += "<div>"+this.model.leadTpe[i].name +":<b>"+this.model.leadTpe[i].points+"</b></div>";
+
+	});
+
+	var mRelation = Model.extend({
+
+		init: function(code, childs) {
+			this._super();
+
+			this._code = code;
+			this._childs = typeof childs !== 'undefined' ? childs : [];
+			this._points;
+		},
+
+		getCode: function() {
+			return this._code;
+		},
+
+		getChildByCode: function (code) {
+
+			for(var i=0; i < this._childs.length; i+=1)
+				if (this._childs[i]._code = code)
+					return this._childs[i];
+		},
+
+		getChilds: function() {
+			return this._childs;
+		}
+
+	});
+
+	var mRelations = Model.extend({
+
+		init: function() {
+			this._super();
+
+			this._relations = [];
+		},
+
+		loadRelations: function(list) {
+			for(var i=0; i < list.length; i+=1){
+				var relation = new mRelation(
+					list[i].code,
+					list[i].childs
+				);
+				this._relations.push(relation);
+			}
+			this.notify();
+		},
+
+		getChildsByCode: function(code) {
+
+			var result = false;
+			for(var i=0; i < this._relations.length; i+=1) {
+				if (this._relations[i]._code == code){
+					if (this._relations[i]._childs.length != 0)
+						result = this._relations[i]._childs;
+				}
 			}
 
-			this.tpeBlock.html(view);
-		}
+			return result;
+		},
 
-		this.renderAll = function() {
+		getCodes: function() {
+			var result = [];
 
-			var view = '',
-				list = this.model.getAllTpe();
-
-			for (var i=0; i < list.length; i+=1) {
-				view += "<div>" + list[i].name + ":<b>" + list[i].points + "</b></div>";
+			for (var i = 0; i < this._relations.length; i+=1){
+				result.push(this._relations[i]._code);
 			}
-
-			this.tpeBlock.html(view);
+			return result;
 		}
+	});
 
-		this.renderAsBar = function() {
+	var mQuestion = Model.extend({
+
+		init: function() {
+			this._super();
+
+			this._id = 0;
+			this._type = 0;
+			this._cycle = 0;
+			this._answers_codes = "";
+
+		}
+	});
+
+	var mResult = Model.extend({
+
+		init: function() {
+			this._super();
+
+			this._tpe = new Stack();
+			this._profile = new Stack();
+		}
+	});
+
+	/* Views */
+	var vTpes = View.extend({
+
+		init: function(model, view) {
+			this._super(model, view);
+		},
+
+		update: function() {
+			this.renderAsColorBar()
+		},
+
+		renderAsColorBar: function() {
 
 			var ration = 0,
 				totalPoints = 0,
 				charts = '',
-				list = model.getAllTpe();
-
-
-			/* count summ of points */
-			for (var i=0; i < list.length; i++) {
-				totalPoints += list[i].points;
-			}
-			ration = totalPoints / 100;
-
-			charts += "<div class='progress'>";
-			for (var i=0; i < list.length; i++) {
-				var percent = list[i].points / ration;
-				var barType = (i % 2)? "bar-success" : "bar-warning";
-				charts +=	"<div class='progress-bar progress-"+barType+"' role='progressbar' style='width: "+(percent)+"%'>" +
-				percent.toFixed(0) + "% - " + list[i].name +
-				"</div>";
-
-			}
-			charts += "</div>";
-			this.tpeBlock.html(charts);
-		}
-
-		this.renderAsColorBar = function() {
-
-			var ration = 0,
-				totalPoints = 0,
-				charts = '',
-				list = model.getAllTpe(),
+				list = this._model.getAllTpe(),
 				color = "#3f5d88",
-				tpeColors = {
-				};
+				tpeColors = {};
 
 			/* count summ of points */
-			for (var i=0; i < list.length; i++) {
-				totalPoints += list[i].points;
+			for (var i = 0; i < list.length; i++) {
+				totalPoints += list[i]._points;
 			}
 			ration = totalPoints / 100;
 
 			charts += "<div class='progress'>";
-			for (var i=0; i < list.length; i++) {
-				var percent = list[i].points / ration;
-				
-				log(list[i].code);
+			for (var i = 0; i < list.length; i++) {
+				var percent = list[i]._points / ration;
 
-				if (list[i].code.indexOf("TEG") != -1) {
+				if (list[i]._code.indexOf("EG") != -1) {
 					color = "#e74c3c";
 				}
-				if (list[i].code.indexOf("TID") != -1) {
+				if (list[i]._code.indexOf("ID") != -1) {
 					color = "#2ecc71";
 				}
-				if (list[i].code.indexOf("TSEG") != -1) {
+				if (list[i]._code.indexOf("SG") != -1) {
 					color = "#9b59b6";
 				}
-				if (list[i].code.indexOf("TSID") != -1) {
+				if (list[i]._code.indexOf("SID") != -1) {
 					color = "#2980b9";
 				}
 
-				charts +=	"<div class='progress-bar progress-bar-info' role='progressbar' style='width: "+(percent)+"%; background-color:"+ color +"'>" +
-				percent.toFixed(0) + "% - " + list[i].name +
+				charts += "<div class='progress-bar progress-bar-info' role='progressbar' style='width: " + (percent) + "%; background-color:" + color + "'>" +
+				percent.toFixed(0) + "% - " + list[i]._name +
 				"</div>";
 
 			}
 			charts += "</div>";
-			this.tpeBlock.html(charts);
+			this._view.html(charts);
 		}
-	}
 
-	/*
-	 Profiles View
-	 */
-	function VProfiles(model, block) {
-		this.model = model;
-		this.profilesBlock = block;
 
-		this.update = function() {
+	});
+
+	/* ProfilePair view */
+	var vProfilePair = View.extend({
+
+		init: function(model, view) {
+			this._super(model, view);
+
+			this._firstSize = 0;
+			this._secondSize = 0;
+		},
+
+		countSize: function() {
+			var sizeRation = (this._model._first._points + this._model._second._points) / 100;
+			this._firstSize = (this._model._first._points != 0) ? this._model._first._points / sizeRation: 0;
+			this._secondSize = (this._model._second._points != 0) ? this._model._second._points / sizeRation : 0;
+		},
+
+		render: function() {
+			var pair = "<div class='progress-bar progress-bar-info' style='float: left; width: "+this._firstSize+"%; color: rgb(72, 85, 86); background-color: #ecf0f1;'>" +
+				this._firstSize.toFixed(0) + "% - " + this._model._first._name +"</div>" +
+				"<div class='progress-bar progress-bar-danger' style='float: right;width: "+this._secondSize+"%; color: white;background-color: #7f8c8d;'>" +
+				this._secondSize.toFixed(0) + "% - " + this._model._second._name +"</div>" +
+				"<div style='clear: both;'></div>";
+			this._view.html(pair)
+		},
+
+		update: function() {
+			this.countSize();
 			this.render();
 		}
+	});
 
-		this.render = function() {
-			var profiles = '';
-			for (var i=0; i < this.model.leadTpeProfile.length; i+=1) {
+	/* Controller */
+	var cQuestionIter = Controller.extend({
 
-				/* if (this.model.profiles[i].pType == Type.tpe) */
-				if (true)
-					profiles += "<div>"+this.model.leadTpeProfile[i].name +":"+this.model.leadTpeProfile[i].points+"</div>";
-			}
+		init: function(questionList, block, prefix){
 
-			for (var i=0; i < this.model.profiles.length; i+=1) {
-				if (this.model.profiles[i].pType == Type.func)
-					profiles += "<div>"+this.model.profiles[i].name +":"+this.model.profiles[i].points+"</div>";
-			}
-			this.profilesBlock.html(profiles);
-		}
-	}
+			this._block = block;
+			this._msgBlock = $('.treetest-msg-block');
+			this._questionsList = questionList;
+			this._questionClassPrefix = prefix;
+			this._currentQuestionNumber = 0;
+			this._questionIdSequence = [];
 
-	/*
-	 Progress bar chart
-	 */
-	function VProfilesChart(model, block) {
-		this.model = model;
-		this.profilesBlock = block;
+			//this.collectIds();
+		},
 
-		this.update = function() {
-			this.render();
-		}
+		collectIds: function() {
+			var self = this;
+			this._block.children('div').each(function() {
+				self._questionIdSequence.push($(this).attr('id'));
+			})
+		},
 
-		this.render = function() {
-			var ration = 0;
-			var totalPoints = 0;
-			var charts = '';
-			var profiles = [];
-
-			/* find all tpe profiles */
-			for (var i=0; i < this.model.profiles.length; i+=1) {
-
-				if (this.model.profiles[i].pType == Type.tpe)
-					profiles.push(this.model.profiles[i]);
-				/* charts += "<div>"+this.model.profiles[i].name +":"+this.model.profiles[i].points+"</div>"; */
-			}
-
-			/* count summ of points */
-			for (var i=0; i < profiles.length; i++) {
-				totalPoints += profiles[i].points;
-			}
-			ration = totalPoints / 100;
-
-			charts += "<div class='progress'>";
-			for (var i=0; i < profiles.length; i++) {
-				var percent = profiles[i].points / ration;
-				var barType = (i % 2)? "bar-success" : "bar-warning";
-				charts +=	"<div class='progress-bar progress-"+barType+"' role='progressbar' style='width: "+(percent)+"%'>" +
-				profiles[i].name +
-				"</div>";
-
-			}
-			charts += "</div>";
-			this.profilesBlock.html(charts);
-		}
-	}
-
-	/* Questions Iterator */
-	function QuestionIter(block, prefix) {
-		this.block = block;
-		this.itemClassPrefix = prefix;
-		this.currentQuestionNumber = 0;
-		this.questionIdSequence = [];
-
-		var self = this;
-		block.children('div').each(function() {
-			self.questionIdSequence.push($(this).attr('id'));
-		});
-
-		this.showFirst = function() {
-			this.block.find('.'+this.itemClassPrefix+this.questionIdSequence[this.currentQuestionNumber]).show('slow');
-		}
-
-		this.next = function() {
-			this.block.find('.'+this.itemClassPrefix+this.questionIdSequence[this.currentQuestionNumber]).hide('slow');
-			this.currentQuestionNumber +=1;
-			this.block.find('.'+this.itemClassPrefix+this.questionIdSequence[this.currentQuestionNumber]).show('slow');
-			/* check is end of questions */
-			if (this.questionIdSequence.length > this.currentQuestionNumber)
-				return true;
+		first: function() {
+			if (this._questionsList.length > this._currentQuestionNumber)
+				this._block.find('.'+this._questionClassPrefix+this._questionsList[this._currentQuestionNumber].id).show('slow');
 			else
-				return false;
-		}
+			    this.msg("No more questions!");
 
-		this.back = function () {
-			this.currentQuestionNumber -=1;
-		}
+		},
 
-		this.isAnswerSet = function() {
-			var questId = this.itemClassPrefix + this.questionIdSequence[this.currentQuestionNumber];
+		next: function() {
+			var status = false;
+
+			this._block.find('.'+this._questionClassPrefix+this._questionsList[this._currentQuestionNumber].id).hide('slow');
+			this._currentQuestionNumber +=1;
+
+			/* check is end of questions */
+			if (this._questionsList.length > this._currentQuestionNumber) {
+				status = true;
+				this._block.find('.'+this._questionClassPrefix+this._questionsList[this._currentQuestionNumber].id).show('slow');
+			}
+
+			return status;
+		},
+
+		isAnswerSet: function() {
+			var questId = this._questionClassPrefix + this._questionsList[this._currentQuestionNumber].id;
 			// check if radio button checked
 			if ($("input:radio[name='" + questId + "']").is(':checked')) {
 				return true;
 			} else {
 				return false;
 			}
-		}
-	}
+		},
 
-	/*
-	 TheTest - class to process test relations presented in json
-	 */
-	function TheTest(testId) {
-		this.testId = testId;
-		this.answer = { id: "", profiletype: ""};
-		this.resultsBlock = $('.treetest-result-block');
-		this.resultSpace = $('.treetest-result-space');
-		this.descriptionBlock = $('.treetest-description');
-		this.debugBlock = $('.treetest-debug-block');
-		this.repeatTestBlock = $('.treetest-repeat-test');
-		this.questionBlock = $('.treetest-question-block');
-		this.msgBlock = $('.treetest-msg-block');
-		this.debugMode = false;
-
-		this.signsBlock = null;
-		this.questionIter = null
-		this.isAnswerSet = false;
-
-		this.signsList = [];
-		this.signsGroups = [];
-		this.questionIdSequence = [];
-		this.signsGroupsViewList = [];
-
-		this.tpeList = new MTpeList();
-		this.profiles = new MProfiles();
-		this.viewTpeList = new VTpeList(this.tpeList, $('.treetest-tpe-block'));
-		//this.profilesView = new VProfiles(this.profiles, $('.treetest-profiles-block'));
-		/* this.profilesViewChart = new VProfilesChart(this.profiles, $('.treetest-profiles-block')); */
-
-		this.tpeList.addObserver(this.viewTpeList);
-		this.profiles.addObserver(this.profilesView);
-		/* this.profiles.addObserver(this.profilesViewChart); */
-
-		this.setIterator = function(iterator) {
-			this.questionIter = iterator;
+		msg: function(text) {
+			this._msgBlock.html("<div class='alert alert-danger' role='alert'>"+text+"</div>");
 		}
 
+	});
 
-		this.connectTpeList = function() {
-			for (var i=0; i < this.signsGroups.length; i+=1) {
-				this.signsGroups[i].addObserver(this.tpeList);
+	// Stacks
+	var sResults = Stack.extend({
+
+		init: function() {
+			this._super();
+		}
+	})
+
+
+	/* Test Class */
+	var TestStages = { tpe: 1, func: 2 };
+
+	var NonverbalTest = Class.extend( {
+
+		init: function(id) {
+
+			this._id = id;
+			this._stage = null;
+
+			/* State variables */
+			this._answer = { id: "", profiletype: ""};
+			this._questionCycleNumber = 0;
+			this._currentProfilePair = null;
+			this._currentRelations = null;
+			this._currentQuestion = null;
+			this._questionIter = null;
+
+			this._isAnswerSet = false;
+
+
+			/* Lists */
+			this._signsList = [];
+			this._relationList = [];
+			this._profileList = [];
+			this._signsGroups = [];
+			this._profileViewList = [];
+			this._profilePairList = [];
+
+			this._questionList = [];
+			this._currentQuestionList = [];
+			this._ignoredTpeList = [];
+
+
+			// result
+			this._result = new mResult();
+			this._twoLeadTpe = new Stack();
+
+			/* Binds */
+
+			// objects
+			this._leadTpe = leadTpe;
+
+			// models classes
+			this._tpeList = new mTpeList();
+			this._tpeListData = new mTpeList();
+			this._mRelations = new mRelations();
+
+				// views classes
+			this._viewTpes = new vTpes(this._tpeList, $('.treetest-tpe-block'));
+			this._tpeList.addObserver(this._viewTpes);
+
+			// Msg
+			this._msgBlock = $('.treetest-msg-block');
+
+			// Functionality profiles div
+			this._profilesDiv = $('.treetest-profiles-block');
+
+			// Description
+			this._descriptionBlock = $('.treetest-description');
+
+			// Question
+			this._questionsDiv = $('.treetest-question-block');
+			this._questionsIdPrefix = 'question_id_';
+
+			// Result
+			this._resultsBlock = $('.treetest-result-block');
+			this._resultSpace = $('.treetest-result-space');
+
+			// Repeat
+			this._repeatTestBlock = $('.treetest-repeat-test');
+
+			// Debug
+			this._debugMode = false;
+			this._debugBlock = $('.treetest-debug-block');
+		},
+
+		start: function() {
+
+			this._stage = TestStages.tpe;
+
+			this.hideTestDescription();
+
+			if (this._debugMode) {
+				this._debugBlock.show();
 			}
-		}
 
-		this.hideTestDescription = function() {
-			this.descriptionBlock.hide();
-		};
+			log(this._questionList);
 
-		this.showMsg = function(text) {
-			this.msgBlock.html("<div class='alert alert-danger' role='alert'>"+text+"</div>");
-		}
+			this._questionCycleNumber = 1;
+			this.findQuestion(TYPES.tpe, this._questionCycleNumber);
+            //
+			this._questionIter = new cQuestionIter(
+				this._currentQuestionList,
+				this._questionsDiv,
+				this._questionsIdPrefix
+			);
 
-		this.setAnswer = function(answer) {
+			this._questionIter.first();
+		},
+
+		stop: function() {
+
+
+		},
+
+		finnished: function() {
+			//alert('finnished');
+			this._resultsBlock.show();
+		},
+
+		terminate: function(text) {
+
+			log(text);
+			this._questionsDiv.hide();
+			this._repeatTestBlock.show();
+
+		},
+
+		nextCycle: function() {
+
+			this._questionCycleNumber +=1;
+			this.findQuestion(TYPES.tpe, this._questionCycleNumber);
+
+			if (this._currentQuestionList.length == 0) {
+				this.terminate("cant find lead tpe");
+				return;
+			}
+
+			this._questionIter = new cQuestionIter(
+				this._currentQuestionList,
+				this._questionsDiv,
+				this._questionsIdPrefix
+			);
+
+			this._questionIter.first();
+		},
+
+		addProfilePairView: function(pair) {
+
+			log('add');
+			var className = pair._id;
+			var progressBar = "<div style='width: 100%;' id='" + className + "' class='progress treetest-sign-group-percentline'></div>";
+
+			this._profilesDiv.append(progressBar);
+
+			var view = new vProfilePair(pair, $('#' + className));
+			view.render();
+			pair.addObserver(view);
+			this._profileViewList.push(view);
+
+		},
+
+		/* Points */
+		addPoint: function() {
+
+			if (this._isAnswerSet) {
+				var code = this._answer.id;
+				var type = this._answer.profiletype;
+
+				if (type == TYPES.tpe) {
+					this._tpeList.addPoint(code);
+					this._tpeListData.addPoint(code);
+
+				} else if (type == TYPES.func) {
+
+					for (var i = 0; i < this._profilePairList.length; i+=1 ){
+
+						this._profilePairList[i].addPoint(code);
+					}
+				}
+			}
+		},
+
+		countPoints: function() {
+
+			//log('countPoints Func');
+
+			if (this._stage == TestStages.tpe) {
+
+				if (this._tpeListData.findLastTpe()){
+
+					var code = this._tpeListData.findLastTpe();
+
+					// add tpe code to result, as profile sequences
+					this._result._tpe.push(code);
+
+					this._tpeListData.removeTpe(code);
+					this._ignoredTpeList.push(code);
+
+					if (this._tpeListData._tpeList.length == 1){
+
+						this.tpeFinded({
+							first: this._tpeListData._tpeList[0]._code,
+							second: code
+						});
+
+
+
+					} else {
+						this.nextCycle();
+					}
+
+				} else {
+					this.nextCycle();
+				}
+
+			} else if(this._stage == TestStages.func) {
+
+				if (this._currentProfilePair._lead != null){
+					this._result._profile.push(this._currentProfilePair._lead);
+					log(this._currentProfilePair._lead);
+					this.continueFunctionalityPart();
+
+				} else {
+					this.terminate("Неудалось определить функциональный профиль");
+					return;
+				}
+			}
+		},
+
+		/* Description */
+		hideTestDescription: function() {
+			this._descriptionBlock.hide();
+		},
+
+		/* Questions and Answers methods */
+		tpeFinded: function(leadTpe) {
+
+			this._leadTpe = leadTpe;
+			log(leadTpe);
+
+			this._twoLeadTpe.push(leadTpe.second);
+			this._twoLeadTpe.push(leadTpe.first);;
+
+			this._result._tpe.push(leadTpe.second);
+			this._result._tpe.push(leadTpe.first);
+
+			// add
+
+			// switch stage
+			this.continueFunctionalityPart();
+		},
+
+		buildFunctionalityPair: function(codes) {
+			var finded = [];
+
+			// find functionality profiles by codes
+			for (var i = 0; i < this._profileList.length; i+=1){
+				var isMatch = false;
+
+				for (var j = 0; j < codes.length; j+=1) {
+					if (this._profileList[i]._code == codes[j])
+						isMatch = true;
+				}
+
+				// make model and put to list
+				if (isMatch)
+					finded.push(this._profileList[i]);
+			}
+
+			// check if find two profile
+			if (finded.length > 1) {
+
+				var pair = new mProfilePair();
+
+				pair._first = finded[0];
+				pair._second = finded[1];
+
+				this._currentProfilePair = pair;
+
+				this._profilePairList.push(pair);
+				this.addProfilePairView(pair);
+
+			}
+		},
+
+		continueFunctionalityPart: function(){
+
+			var relationArray = null;
+
+			if (this._stage == TestStages.tpe) {
+				relationArray = this._mRelations.getChildsByCode(this._twoLeadTpe.pop());
+
+			} else {
+				msg("peek last profile: ", this._result._profile.peekLast());
+				relationArray = this._currentRelations.getChildsByCode(this._result._profile.peekLast());
+
+				if (!relationArray) {
+					relationArray = this._mRelations.getChildsByCode(this._twoLeadTpe.pop());
+
+				}
+			}
+
+
+			if (relationArray){
+				this._stage = TestStages.func;
+				this._currentRelations = new mRelations();
+				this._currentRelations.loadRelations(relationArray);
+
+
+			} else {
+				log("Тест закончился");
+				this.finnished();
+				return;
+			}
+
+
+			log(this._currentRelations);
+
+			var relationCodes = this._currentRelations.getCodes();
+			//log('relations codes:');
+			//log(relationCodes);
+			this.findFunctionalityQuestions(TYPES.func, relationCodes);
+
+			this._questionIter = new cQuestionIter(
+				this._currentQuestionList,
+				this._questionsDiv,
+				this._questionsIdPrefix
+			);
+
+			this.buildFunctionalityPair(relationCodes);
+			this._questionIter.first();
+		},
+
+		setAnswer: function(answer) {
 			if (answer.id && answer.profiletype) {
-				this.answer.id = answer.id;
-				this.answer.profiletype = answer.profiletype;
-				this.isAnswerSet = true;
+				this._answer = answer;
+				this._isAnswerSet = true;
 
 			}
-		}
+		},
 
-		this.terminateTest = function() {
-			this.questionBlock.hide();
-			this.repeatTestBlock.show();
-		}
+		nextQuestion: function() {
 
-		this.finnished = function() {
-			this.resultsBlock.show();
-		}
+			if (this._isAnswerSet) {
+				if (this._questionIter.next()) {
+				} else {
+					//this.finnished();
+					log('questions end. countPoint. Find lead');
+					this.countPoints();
+				}
 
-		this.loadTestStructure = function() {
+				this._isAnswerSet = false;
+			} else {
+				alert("Выберите ответ!");
+			}
+		},
+
+		/* Tools */
+		ignored: function(code) {
+
+			var ignored = false;
+
+			for(var i = 0; i < this._ignoredTpeList.length; i+=1){
+				if (this._ignoredTpeList[i] == code)
+					ignored = true;
+			}
+
+			return ignored;
+		},
+
+		findQuestion: function(type, cycle) {
+
+			log("before");
+			this._currentQuestionList = [];
+
+			log(this._currentQuestionList);
+
+			for(var i = 0; i < this._questionList.length; i+=1) {
+				if (type == this._questionList[i].type) {
+					if (cycle == this._questionList[i].cycle) {
+
+						var answers = this._questionList[i].answers_code;
+						if (Object.prototype.toString.call(answers) === '[object Array]') {
+							if (answers.length > 0) {
+
+								var isMatch = false;
+
+								for (var j = 0; j < answers.length; j += 1) {
+									if (this.ignored(answers[j]))
+										isMatch = true;
+								}
+
+								if (!isMatch) this._currentQuestionList.push(this._questionList[i]);
+							}
+						}
+					}
+				}
+			}
+
+			log("after");
+			log(this._currentQuestionList );
+		},
+
+		findFunctionalityQuestions: function(type, codes){
+
+			this._currentQuestionList = [];
+
+			for(var i = 0; i < this._questionList.length; i+=1){
+				if (type == this._questionList[i].type){
+
+					var answers = this._questionList[i].answers_code;
+					if (Object.prototype.toString.call(answers) == '[object Array]') {
+						if (answers.length > 0){
+
+							var isMatch = false;
+
+							for(var j = 0; j < answers.length; j += 1){
+								for (var k = 0; k < codes.length; k +=1){
+									if (answers[j] == codes[k])
+										isMatch = true;
+								}
+							}
+							if (isMatch)
+								this._currentQuestionList.push(this._questionList[i]);
+						}
+					}
+				}
+			}
+			log(this._currentQuestionList);
+		},
+
+		showMsg: function(text) {
+			this._msgBlock.html("<div class='alert alert-danger' role='alert'>"+text+"</div>");
+		},
+
+		loadTestData: function() {
+
 			var self = this;
-			$.post(glob.ajaxurl, { id: this.testId, action: "wp_treetest_get_test_structure"}, function(result, status) {
+			$.post(glob.ajaxurl, { id: this._id, action: "nonverbal_test_get_test_structure"}, function(result, status) {
+
+				log(result);
+
+				// return;
 				/* load sigs groups */
 				if (result['signsGroups']) {
 					self.buildSingsGroups(result['signsGroups']);
@@ -766,63 +1307,52 @@ jQuery(document).ready(function ($) {
 
 				/* load profiles */
 				if (result['profiles']) {
-					//self.buildProfiles(result['profiles']);
+					self.buildProfiles(result['profiles']);
 				} else {
 					log('cant load profiles');
 				}
 
 				// is debug set
 				if (result['debugMode'] == 1) {
-					self.debugMode = true;
+					self._debugMode = true;
 				}
-			});
-		};
 
-		this.loadResult = function(id, formValues) {
+				// questions
+				if (result['questions']) {
+					self._questionList = result['questions'];
+				} else {
+					self.showMsg("Can't load questions");
+				}
+
+				// relations
+				if (result['relations']) {
+					self.buildRelations(result['relations']);
+				} else {
+					self.showMsg("Can't load relations");
+				}
+
+			});
+
+		},
+
+		loadResultData: function(id, formValues) {
 
 			log(id);
-			var self = this;
+			var self = this,
+				params = [];
 
-			var leadFuncSing = [];
-			var tpe = this.tpeList.findLeadTpe();
-			for (var i=0; i < this.signsGroups.length; i+=1) {
-				if (this.signsGroups[i].gType == Type.func) {
-					for (var j=0; j < this.signsGroups[i].leadSign.length; j +=1) {
-						leadFuncSing.push(this.signsGroups[i].leadSign[j].code);
-					}
-				}
-			}
-
-			leadFuncSing = leadFuncSing.join();
-
-			/*
-			$.post(glob.ajaxurl, {
-				leadtpe: tpe[0], // lead tpe type
-				subtpe: tpe[1], // second tpe type
-				func: leadFuncSing,
-				test_id: id,
-				action: "wp_treetest_get_result"
-			}, function(result, status) {
-				//log(status);
-				if (status == "success") {
-					if (result) {
-						self.resultSpace.html(result);
-						self.debugBlock.show();
-						self.repeatTestBlock.show();
-					}
-				} else {
-					this.showMsg(tr.__failed_load_result);
-				}
-			});
-
-			*/
-
-			params = [];
+			// add test_id
 			params.push("test_id=" 	+ id);
-			params.push("subtpe=" 	+ tpe[1]);
-			params.push("leadtpe=" 	+ tpe[0]);
-			params.push("func="		+ leadFuncSing);
-			params.push("action=wp_treetest_get_result");
+
+			// get tpe codes
+			while (this._result._tpe.size() != 0)
+				params.push("tpe[]=" + this._result._tpe.pop());
+
+			// get profile codes
+			while (this._result._profile.size() != 0)
+				params.push("profile[]=" + this._result._profile.pop());
+
+			params.push("action=nonverbal_test_get_result");
 
 			$.ajax({
 				type: "POST",
@@ -831,260 +1361,119 @@ jQuery(document).ready(function ($) {
 			}).done(function(result) {
 
 				if (result) {
-					self.resultSpace.html(result);
-					self.debugBlock.show();
-					self.repeatTestBlock.show();
+					self._resultSpace.html(result);
+					self._debugBlock.show();
+					self._repeatTestBlock.show();
 				} else {
 					this.showMsg(tr.__failed_load_result);
 				}
 			});
-		};
 
-		this.buildSingsGroups = function(groups) {
+		},
+		
+		/* Builders */
+		buildSingsGroups: function(groups) {
 			for(var i=0; i < groups.length; i+=1) {
 
-				var group = new MSignGroup(
+				var group = new mSignGroup(
 					groups[i].shortName,
 					groups[i].gType
 				);
 				group.firstSign = groups[i].firstSign;
 				group.secondSign = groups[i].secondSign;
-				this.signsList.push(group.firstSign);
-				this.signsList.push(group.secondSign);
-				this.signsGroups.push(group);
+				this._signsList.push(group.firstSign);
+				this._signsList.push(group.secondSign);
+				this._signsGroups.push(group);
 			}
-			this.connectSignGroupViews();
-		}
+			// this.connectSignGroupViews();
+		},
 
-		this.buildTpeList = function(list) {
+		buildTpeList: function(list) {
 
 			for(var i=0; i < list.length; i+=1) {
 
-				var tpe = new MTpe(
+				var tpe = new mTpe(
 					list[i].code,
 					list[i].name,
 					list[i].sequenceSign.split(',')
 				);
 
-				// connect sign to tpe if this sign in sings sequence of profile
-				for (var j=0; j < this.signsList.length; j+=1) {
-					if (list[i].sequenceSign.indexOf(this.signsList[j].code) != -1) {
-						tpe.connectSign(this.signsList[j]);
-					}
-				}
-				this.tpeList.addTpe(tpe);
+				//connect sign to tpe if this sign in sings sequence of profile
+				//for (var j=0; j < this._signsList.length; j+=1) {
+					//if (list[i].sequenceSign.indexOf(this._signsList[j].code) != -1) {
+					//	tpe.connectSign(this._signsList[j]);
+					//}
+				//}
+				this._tpeList.addTpe(tpe);
+				this._tpeListData.addTpe(tpe);
 			}
 
-			this.connectTpeList();
-		}
+			//this.connectTpeList();
+		},
 
-		this.buildProfiles = function(list) {
+		buildRelations: function(list){
 
-			for(var i=0; i < list.length; i+=1) {
+			this._mRelations = new mRelations();
+			this._mRelations.loadRelations(list);
+			log(this._mRelations);
+		},
 
-				var profile = new MProfile(
+		buildProfiles: function(list) {
+
+			for (var i = 0; i < list.length; i += 1){
+
+				var profile = new mProfile(
 					list[i].code,
 					list[i].name,
 					list[i].pType,
 					list[i].sequenceSign.split(',')
 				);
 
-				// connect sign to profile if sign in sings sequence of profile
-				for (var j=0; j < this.signsList.length; j+=1) {
-					if (list[i].sequenceSign.indexOf(this.signsList[j].code) != -1) {
-						profile.connectSign(this.signsList[j]);
-					}
-				}
-
-				// connect tpe to profile if sign in sings sequence of profile
-				for (var j=0; j < this.tpeList.length; j+=1) {
-					if (list[i].sequenceSign.indexOf(this.tpeList[j].code) != -1) {
-						profile.connectTpe(this.tpeList[j]);
-					}
-				}
-
-				this.profiles.addProfile(profile);
+				this._profileList.push(profile);
 			}
 
-			var profilesObs = this.profiles.profiles;
-			// connect tpe to profile if tpe in components sequence of profile
-			for (var p=0; p < profilesObs.length; p+=1) {
-				for (var j=0; j < profilesObs.length; j+=1) {
-					if (profilesObs[p].sequenceOfSign.indexOf(profilesObs[j].code) != -1) {
-						profilesObs[p].connectProfile(profilesObs[j]);
-					}
-				}
-			}
-
-			//this.connectProfilesView();
+			log(this._profileList);
 		}
 
-		this.setSignsBlock = function(block) {
-			this.signsBlock = block;
-		}
-
-		this.addPoint = function() {
-
-			if (this.isAnswerSet) {
-				var code = this.answer.id;
-				var type = this.answer.profiletype;
-
-				if (type == Type.tpe) {
-					this.signsGroups.forEach(function(group) {
-						group.addPoint(code);
-					});
-				} else if (type == Type.func) {
-
-					var tpeGroupAmount = 0,
-						equalGroupAmount = 0;
-
-					for (var i=0; i < this.signsGroups.length; i+=1) {
-						if (this.signsGroups[i].gType == Type.tpe) {
-
-							tpeGroupAmount +=1;
-							if (this.signsGroups[i].isEqual) {
-								equalGroupAmount +=1;
-							}
-						}
-					}
-
-					if (!this.tpeList.isLeadTpeFind)
-						this.errorSelectLeadTpe();
-					else
-						if (!this.tpeList.isSubTpeFind)
-							this.errorSelectSubTpe();
-
-
-
-
-					if ((equalGroupAmount > (tpeGroupAmount - equalGroupAmount))) {
-						this.errorSelectLeadTpe();
-					} else {
-						this.signsGroups.forEach(function(group) {
-							group.addPoint(code);
-						});
-					}
-				}
-			}
-		};
-
-		this.errorSelectLeadTpe = function() {
-			this.terminateTest();
-			this.showMsg(tr.__cant_find_leading_tpe);
-			this.repeatTestBlock.show();
-		}
-
-		this.errorSelectSubTpe = function () {
-			this.terminateTest();
-			this.showMsg(tr.__cant_find_tpe_subtype);
-			this.repeatTestBlock.show();
-		}
-
-		this.connectSignGroupViews = function() {
-			var self = this;
-
-			self.signsBlock.append("<div>" + tr.__TPE + "</div>");
-			this.signsGroups.forEach(function (group) {
-				if (group.gType == Type.tpe) {
-					var divClassName = group.shortName.replace(':', "");
-					var divElement = "<div style='width: 100%;' id='"+divClassName+"' class='progress treetest-sign-group-percentline'></div>";
-
-					self.signsBlock.append(divElement);
-					var view = new VSignGroup(group, $('#'+divClassName));
-
-					view.render();
-					group.addObserver(view);
-					self.signsGroupsViewList.push(view);
-				}
-			});
-
-			self.signsBlock.append("<div>" + tr.__Functional + "</div>");
-			this.signsGroups.forEach(function (group) {
-				if (group.gType == Type.func) {
-					var divClassName = group.shortName.replace(':', "");
-					var divElement = "<div style='width: 100%;' id='"+divClassName+"' class='progress treetest-sign-group-percentline'></div>";
-
-					self.signsBlock.append(divElement);
-					var view = new VSignGroup(group, $('#'+divClassName));
-
-					view.render();
-					group.addObserver(view);
-					self.signsGroupsViewList.push(view);
-				}
-			})
-		}
-
-		this.connectProfilesView = function() {
-			for (var i=0; i < this.signsGroups.length; i+=1) {
-				this.signsGroups[i].addObserver(this.profiles);
-			}
-		}
-
-		this.startTest = function() {
-			this.hideTestDescription();
-
-			if (this.debugMode) {
-				this.debugBlock.show();
-			}
-
-			this.questionIter.showFirst();
-		}
-
-		this.nextQuestion = function() {
-			if (this.isAnswerSet) {
-				if (this.questionIter.next()) {
-				} else {
-					this.finnished();
-				}
-				this.isAnswerSet = false;
-			} else {
-				alert("Выберите ответ!");
-			}
-		}
-	};
-	/*
-	 End of TestWalker class
-	 */
-
-	// global var
-	var questionIter = new QuestionIter(
-		$('.treetest-question-block'),
-		'question_id_'
-	);
-
-	var block = $('.treetest-signs-block');
-
-	var test =  new TheTest(getTestId());
-	test.setIterator(questionIter);
-	test.setSignsBlock(block);
-	test.loadTestStructure();
-
-
-	/* Connecti to ui */
-	$('.treetest-show-result').click( function () {
-
-		var testId = $(this).attr('id');
-		if(testId) {
-			test.loadResult(testId);
-		} else {
-			alert(tr.__failed_load_result);
-		}
 	});
 
+	/* Init test and connect ui */
+	function getTestId() {
+		return $('.treetest').attr('id');
+	}
 
+	/* Main Test */
+	var Test = new NonverbalTest(getTestId());
+
+	// load data
+	Test.loadTestData();
+
+
+	/* Ui */
 	$('.treetest-start-test').click( function () {
 		$(this).hide();
-		test.startTest();
+		Test.start();
 	});
 
 
+	$("button#treetest-answer-button").click(function () {
+		//log("answer click");
+		Test.setAnswer({
+			id: $(this).val(),
+			profiletype: $(this).attr('profiletype')
+		});
+		Test.addPoint();
+		Test.nextQuestion();
+	});
+
+	// SurveyFrom
 	$('form#survey-form').submit(function(e) {
 
 		var testId = $('.submit-form').attr('id');
 		log(testId);
 
 		if (testId) {
-			test.loadResult(testId, $(this).serialize());
+			Test.loadResultData(testId, $(this).serialize());
 		} else {
 			alert(tr.__failed_load_result);
 		}
@@ -1095,14 +1484,4 @@ jQuery(document).ready(function ($) {
 		e.preventDefault();
 	})
 
-
-	$("button#treetest-answer-button").click(function () {
-		log("answer click");
-		test.setAnswer({
-			id: $(this).val(),
-			profiletype: $(this).attr('profiletype')
-		});
-		test.addPoint();
-		test.nextQuestion();
-	});
 });

@@ -34,6 +34,8 @@ class Model_nvQuestion extends Core_Model {
 	private $_answers_id = '';
 
 	private $_type = 0;
+
+	private $_cycle = 0;
 	/**
 	 * Test id
 	 * @var integer
@@ -74,6 +76,14 @@ class Model_nvQuestion extends Core_Model {
 		return $this->_type;
 	}
 
+	public function setCycle($cycle) {
+		$this->_cycle = (int)$cycle;
+	}
+
+	public function getCycle() {
+		return $this->_cycle;
+	}
+
 	public function setTestId($id) {
 		$this->_test_id = (int)$id;
 	}
@@ -112,7 +122,7 @@ class Model_nvQuestion extends Core_Model {
 
 		if ($id) {
 
-			$query = "SELECT * FROM " . $this->_tableQuestions . ' WHERE test_id=' . $id;
+			$query = "SELECT * FROM " . $this->_tableQuestions . ' WHERE test_id=' . $id . ' ORDER BY type ASC';
 			$type = 'ARRAY_A';
 			return $this->_db->get_results($query, $type);
 
@@ -125,7 +135,7 @@ class Model_nvQuestion extends Core_Model {
 
 		if ($id) {
 
-			$query = "SELECT * FROM " . $this->_tableQuestions . ' WHERE test_id=' . $id . " ORDER BY type";
+			$query = "SELECT * FROM " . $this->_tableQuestions . ' WHERE test_id=' . $id . " ORDER BY type ASC";
 			return $this->_db->get_results($query);
 
 		} else {
@@ -162,6 +172,7 @@ class Model_nvQuestion extends Core_Model {
 			$this->_text = $object->text;
 			$this->_answers_id = $object->answers_id;
 			$this->_type = $object->type;
+			$this->_cycle = $object->cycle;
 			$this->_test_id = $object->test_id;
 
 			return $this;
@@ -183,10 +194,11 @@ class Model_nvQuestion extends Core_Model {
 					'text' => $this->_text,
 					'answers_id' => $this->_answers_id,
 					'type' => $this->_type,
+					'cycle' => $this->_cycle,
 					'test_id' => $this->_test_id
 				),
 				array('id' => $id),				// where condition
-				array('%s', '%s', '%d', '%d'),		// value types
+				array('%s', '%s', '%d', '%d', '%d'),		// value types
 				array('%d')						// condition type
 			);
 
@@ -204,6 +216,7 @@ class Model_nvQuestion extends Core_Model {
 				'text' => $this->_text,
 				'answers_id' => $this->_answers_id,
 				'type' => $this->_type,
+				'cycle' => $this->_cycle,
 				'test_id' => $this->_test_id
 			)
 		);

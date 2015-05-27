@@ -37,7 +37,7 @@ spl_autoload_register(array('Core_Test', 'auto_load'));
 require_once(NV_DIR . 'includes/helper/nvDbUpdate.php');
 
 register_activation_hook(__FILE__, 'nv_activation');
-// add_action('plugins_loaded', 'nv_plugins_loaded');
+add_action('plugins_loaded', 'nv_plugins_loaded');
 
 function nv_autoload($class) {
 
@@ -86,7 +86,7 @@ function nv_activation() {
 }
 
 function nv_plugins_loaded() {
-	// load_plugin_textdomain('nonverbal-test', false, NV_BASEDIR.'/languages');
+	load_plugin_textdomain('nonverbal-test', false, NV_BASEDIR.'/languages');
 }
 
 
@@ -94,8 +94,8 @@ function nv_init() {
 
 	if(is_admin())
 		new nvTest();
-	// else
-		// new Controller_nvFront();
+	else
+		$front = new Controller_nvFront();
 		// new TreeTest();
 		// new TreeTestSettings();
 	// TT_Routing::execute();

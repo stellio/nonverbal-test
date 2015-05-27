@@ -50,9 +50,14 @@ class Controller_nvResult extends Controller_ContentTemplate {
 		$test = nvModel::factory('nvTest');
 		$result = nvModel::factory('nvResult');
 		$tpe = nvModel::factory('nvTpe');
+		$profile = nvModel::factory('nvProfile');
 		$view = nvView::factory('result/edit');
 
+		$test_id = $this->req('test_id');
+
 		$tpeList = array();
+		$profiles = $profile->loadByTestAndTypeId($test_id, nvModel::TYPE_FUNCTIONAL);
+		$selected = array();
 
 		$testId = $this->req('test_id');
 		if ($testId) {
@@ -62,7 +67,9 @@ class Controller_nvResult extends Controller_ContentTemplate {
 
 		$this->template->content = $view->bind('tpe', $tpeList)
 										->bind('test', $test)
-										->bind('result', $result);
+										->bind('result', $result)
+										->bind('profiles', $profiles)
+										->bind('selected', $selected);
 	}
 
 	/**
@@ -73,9 +80,15 @@ class Controller_nvResult extends Controller_ContentTemplate {
 		$tpe = nvModel::factory('nvTpe');
 		$test = nvModel::factory('nvTest');
 		$result = nvModel::factory('nvResult');
+		$profile = nvModel::factory('nvProfile');
+
 		$view = nvView::factory('result/edit');
 
+		$test_id = $this->req('test_id');
+
 		$tpeList = array();
+		$selected = array();
+		$profiles = $profile->loadByTestAndTypeId($test_id, nvModel::TYPE_FUNCTIONAL);
 
 		$testId = $this->req('test_id');
 		if ($testId) {
@@ -85,12 +98,16 @@ class Controller_nvResult extends Controller_ContentTemplate {
 
 			if ($this->req('id')) {
 				$result->loadById($this->req('id'));
+				$selected = split(",", $result->getFunc());
 			}
 		}
 
 		$this->template->content = $view->bind('tpe', $tpeList)
 										->bind('test', $test)
-										->bind('result', $result);
+										->bind('result', $result)
+										->bind('profiles', $profiles)
+										->bind('selected', $selected)
+										->bind('func', $result->getFunc());
 	}
 
 	/**
@@ -100,6 +117,9 @@ class Controller_nvResult extends Controller_ContentTemplate {
 
 		$test = nvModel::factory('nvTest');
 		$result = nvModel::factory('nvResult');
+
+
+		
 
 		if ($this->req('test_id')) {
 			$test->loadById($this->req('test_id'));
@@ -112,12 +132,12 @@ class Controller_nvResult extends Controller_ContentTemplate {
 				$result->setTitle($this->req('title'));
 				$result->setTpe($this->req('tpe'));
 				$result->setFunc($this->req('func'));
-				$result->setText($this->req('description'));
+				$result->setText($this->req('text'));
 
 				if ($result->update($this->req('id')))
-					nvHtml::admin_notices('Result Updated', 'info');
+					nvHtml::admin_notices('Обновлен', 'info');
 				else
-					nvHtml::admin_notices('Cant Updated The Result!');
+					nvHtml::admin_notices('Не удалось обновить', 'danger');
 			}
 			// save result as new
 			else {
@@ -126,12 +146,12 @@ class Controller_nvResult extends Controller_ContentTemplate {
 				$result->setTitle($this->req('title'));
 				$result->setTpe($this->req('tpe'));
 				$result->setFunc($this->req('func'));
-				$result->setText($this->req('description'));
+				$result->setText($this->req('text'));
 
 				if ($result->save())
-					nvHtml::admin_notices('Result Created', 'info');
+					nvHtml::admin_notices('Сохранен', 'danger');
 				else
-					nvHtml::admin_notices('Cant Create Result');
+					nvHtml::admin_notices('Не удалось сохранить', 'danger');
 			}
 		}
 

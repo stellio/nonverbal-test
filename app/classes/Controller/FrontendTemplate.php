@@ -1,8 +1,8 @@
 <?php
 
-class Controller_BackendTemplate extends Controller_nvTemplate {
+class Controller_FrontendTemplate extends Controller_nvTemplate {
 	
-	public $template = 'templates/backend';
+	public $template = 'templates/frontend';
 
 
 	public function __construct() {
@@ -13,7 +13,7 @@ class Controller_BackendTemplate extends Controller_nvTemplate {
 
 		parent::before();
 
-		if(true) {// $this->auto_render) {
+		if(true ) {// $this->auto_render) {
 			$this->template->content = '';
 		}
 	}

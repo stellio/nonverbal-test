@@ -99,7 +99,8 @@ class Controller_nvProfile extends Controller_ContentTemplate {
 				$profile->loadById($id);
 				$profile->setName($this->req('profileName'));
 				$profile->setCode($this->cleanUpStr($this->req('profileCode')));
-				$profile->setSequenceOfSign(join(',', $this->req('profileSequence')));
+				if ($this->req('profileSequence'))
+					$profile->setSequenceOfSign(join(',', $this->req('profileSequence')));
 
 				if ($profile->update($id))
 					nvHtml::admin_notices('Профиль успешно обновлен', 'info');
@@ -110,7 +111,8 @@ class Controller_nvProfile extends Controller_ContentTemplate {
 				$profile->setType($type);
 				$profile->setName($this->req("profileName"));
 				$profile->setCode($this->cleanUpStr($this->req('profileCode')));
-				$profile->setSequenceOfSign(join(',', $this->req('profileSequence')));
+				if ($this->req('profileSequence'))
+					$profile->setSequenceOfSign(join(',', $this->req('profileSequence')));
 
 				if ($profile->save())
 					nvHtml::admin_notices('Профиль успешно добавлен', 'info');

@@ -25,6 +25,7 @@ class Helper_nvDbUpdate {
 	private $TABLE_NAME_RESULTS = 'results';
 	private $TABLE_NAME_PROFILES = 'profiles';
 	private $TABLE_NAME_QUESTIONS = 'questions';
+	private $TABLE_NAME_RELATIONS = 'relations';
 	private $TABLE_NAME_STATISTIC = 'statistic';
 	private $TABLE_NAME_SIGNS_GROUPS = 'signs_groups';
 	private $_wpdb;
@@ -64,6 +65,7 @@ class Helper_nvDbUpdate {
 		$this->TABLE_NAME_RESULTS = $pfx . $this->TABLE_NAME_RESULTS;
 		$this->TABLE_NAME_PROFILES = $pfx . $this->TABLE_NAME_PROFILES;
 		$this->TABLE_NAME_QUESTIONS = $pfx . $this->TABLE_NAME_QUESTIONS;
+		$this->TABLE_NAME_RELATIONS = $pfx . $this->TABLE_NAME_RELATIONS;
 		$this->TABLE_NAME_STATISTIC = $pfx . $this->TABLE_NAME_STATISTIC;
 		$this->TABLE_NAME_SIGNS_GROUPS = $pfx . $this->TABLE_NAME_SIGNS_GROUPS;
 
@@ -78,6 +80,7 @@ class Helper_nvDbUpdate {
 		$this->createTableResults();
 		$this->createTableProfiles();
 		$this->createTableQuestions();
+		$this->createTableRelations();
 		$this->createTableStatistic();
 		$this->createTableSignsGroups();
 
@@ -227,6 +230,7 @@ class Helper_nvDbUpdate {
 				text text NOT NULL,
 				answers_id VARCHAR(255) NOT NULL,
 				type int(10) NOT NULL,
+				cycle int(10) NOT NULL,
 				test_id int(10) NOT NULL,
 				UNIQUE KEY id (id)
 			) DEFAULT CHARSET=utf8;";
@@ -234,6 +238,26 @@ class Helper_nvDbUpdate {
 			// make query
 			dbDelta($sql);
 		}
+	}
+
+	private function createTableRelations() {
+
+		$table_name = $this->TABLE_NAME_RELATIONS;
+
+		if ($this->_wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
+
+			$sql = "CREATE TABLE " . $table_name . " (
+				id int(10) NOT NULL AUTO_INCREMENT,
+				test_id int(10) NOT NULL,
+				code VARCHAR(255) NOT NULL,
+				type int(10) NOT NULL,
+				parent_id int(10) NOT NULL,
+				UNIQUE KEY id (id)
+			) DEFAULT CHARSET=utf8;";
+
+			// make query
+			dbDelta($sql);
+		}	
 	}
 
 	private function createTableStatistic() {

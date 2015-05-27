@@ -51,6 +51,19 @@ class Controller_nvQuestion extends Controller_ContentTemplate {
 	 */
 	public function action_add() {
 
+		$test_id = $this->req('test_id');
+
+		// for select options
+		$tpe = nvModel::factory('nvTpe');
+		$sign = nvModel::factory('nvSign');
+		$profile = nvModel::factory('nvProfile');
+
+		$tpes = $tpe->loadByTest($test_id);
+		$signs = $sign->loadByTestId($test_id);
+		$profiles = $profile->loadByTestAndTypeId($test_id, nvModel::TYPE_FUNCTIONAL);
+		// end for select options
+
+
 		$test = nvModel::factory('nvTest');
 		$question = nvModel::factory('nvQuestion');
 		$view = nvView::factory('question/edit');
@@ -58,13 +71,30 @@ class Controller_nvQuestion extends Controller_ContentTemplate {
 		if ($this->req('test_id'))
 			$test->loadById($this->req('test_id'));
 
-		$this->template->content = $view->bind('test', $test)->bind('question', $question);
+		$this->template->content = $view->bind('test', $test)
+										->bind('question', $question)
+										->bind('tpes', $tpes)
+										->bind('signs', $signs)
+										->bind('profiles', $profiles);
+
 	}
 
 	/**
 	 * Show form to edit exist question
 	 */
 	public function action_edit() {
+
+		// for select options
+		$test_id = $this->req('test_id');
+
+		$tpe = nvModel::factory('nvTpe');
+		$sign = nvModel::factory('nvSign');
+		$profile = nvModel::factory('nvProfile');
+
+		$tpes = $tpe->loadByTest($test_id);
+		$signs = $sign->loadByTestId($test_id);
+		$profiles = $profile->loadByTestAndTypeId($test_id, nvModel::TYPE_FUNCTIONAL);
+		// end for select options
 
 		$test = nvModel::factory('nvTest');
 		$answer = nvModel::factory('nvAnswer');
@@ -84,7 +114,10 @@ class Controller_nvQuestion extends Controller_ContentTemplate {
 
 		$this->template->content = $view->bind('test', $test)
 										->bind('answers', $answers)
-										->bind('question', $question);
+										->bind('question', $question)
+										->bind('tpes', $tpes)
+										->bind('signs', $signs)
+										->bind('profiles', $profiles);
 	}
 
 	/**
@@ -111,6 +144,7 @@ class Controller_nvQuestion extends Controller_ContentTemplate {
 				$question->loadById($this->req('id'));
 				$question->setText($this->req('text'));
 				$question->setType($this->req('type'));
+				$question->setCycle($this->req('cycle'));
 
 				// check if set as first question
 				if ($this->req('treetest-first-question') == 'on') {
@@ -131,6 +165,7 @@ class Controller_nvQuestion extends Controller_ContentTemplate {
 
 				$question->setText($this->req('text'));
 				$question->setType($this->req('type'));
+				$question->setCycle($this->req('cycle'));
 				$question->setTestId($this->req('test_id'));
 
 				if ($question->save()) {
@@ -153,6 +188,10 @@ class Controller_nvQuestion extends Controller_ContentTemplate {
 			if ($this->req('answers')) {
 
 				$profileType = $this->req('type');
+
+				// echo "<pre>";
+				// print_r($this->req('answers'));
+				// echo "</pre>";
 
 				foreach ($this->req('answers') as $type => $answers) {
 

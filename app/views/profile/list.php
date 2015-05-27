@@ -1,7 +1,9 @@
-<div class="wrap">
-    <div id="poststuff">
-        <h3 class="hndle">ТПЭ</h3>
-        <table class="wp-list-table widefat" id="">
+<div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">ТПЭ</h3>
+        </div>
+        <table class="table" id="">
             <thead>
             <tr>
                 <th scope="col">Профили</th>
@@ -27,7 +29,7 @@
                             ),
                                 nvHtml::imgEdit(),
                                 "Редактировать",
-                                'ajax-call'
+                                'ajax-call btn btn-info btn-xs'
                             );?>
                             <?=nvHtml::link(array(
                                 'module' => 'nvProfile',
@@ -38,7 +40,7 @@
                             ),
                                 nvHtml::imgDelete(),
                                 "Удалить",
-                                'ajax-call'
+                                'ajax-call btn btn-danger btn-xs'
                             );?>
                         </td>
                     </tr>
@@ -50,6 +52,7 @@
             <?php } ?>
             </tbody>
         </table>
+    </div>
         <p></p>
         <?php echo nvHtml::button(
             array(
@@ -59,14 +62,15 @@
                 'type' => nvModel::TYPE_TPE
             ),
             "Добавить",
-            "button-secondary ajax-call");
+            "btn btn-primary btn-sm ajax-call");
         ?>
 
         <p></p>
         <p></p>
-        <!-- <div class="postbox"> -->
-        <h3 class="hndle">Функциональные</h3>
-        <!-- </div> -->
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Функциональные</h3>    
+        </div>
         <table class="wp-list-table widefat" id="">
             <thead>
             <tr>
@@ -93,7 +97,7 @@
                             ),
                                 nvHtml::imgEdit(),
                                 "Редактировать",
-                                'ajax-call'
+                                'ajax-call btn btn-xs btn-info'
                             );?>
                             <?=nvHtml::link(array(
                                 'module' => 'nvProfile',
@@ -104,7 +108,7 @@
                             ),
                                 nvHtml::imgDelete(),
                                 "Удалить",
-                                'ajax-call'
+                                'ajax-call btn btn-xs btn-danger'
                             );?>
                         </td>
                     </tr>
@@ -116,6 +120,7 @@
             <?php } ?>
             </tbody>
         </table>
+    </div>
         <p></p>
         <?php echo nvHtml::button(
             array(
@@ -125,7 +130,6 @@
                 'type' => nvModel::TYPE_FUNCTIONAL
             ),
             "Добавить",
-            "button-secondary ajax-call");
+            "btn btn-primary btn-sm ajax-call");
         ?>
-        </div>
 </div>

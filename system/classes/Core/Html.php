@@ -187,15 +187,24 @@ class Core_Html extends Core_Object {
 		foreach ($params as $key => $value) {
 			$url[] = $key . '=' . $value ;
 		}
-		return '<a href="' . $entryPoint . join('&', $url) . '" title="' . $hint . '" class= ' . $class . '  >' . $source . '</a>';
+		return '<a href="' . $entryPoint . join('&', $url) . '" title="' . $hint . '" class="' . $class . '"  >' . $source . '</a>';
 	}
 
 	public static function imgDelete() {
-		return '<img class="treetest-icons" src="' . NV_URL . '/assets/img/16/delete.png">';
+		return '<span class="fui-trash"></span>';
+	}
+
+	public static function imgPlus() {
+		return '<span class="fui-plus"></span>';	
+	}
+
+	public static function imgInfo() {
+		return '<span class="fui-info-circle"></span>';	
+
 	}
 
 	public static function imgEdit() {
-		return '<img class="treetest-icons" src="' . NV_URL . '/assets/img/16/pencil.png">';
+		return '<span class="fui-new"></span>';
 	}
 
 	public static function imgChart() {
@@ -213,13 +222,16 @@ class Core_Html extends Core_Object {
 		return '<a class="' . $class . '" href="' . $entryPoint . join('&', $url) . '" >' . $source . '</a>';
 	}
 
-	public static function admin_notices($msg, $type = 'error') {
-		if($type === 'info')
+	public static function admin_notices($msg, $type = 'success') {
+		// if($type === 'info')
 			// echo '<div class="updated"><p><strong>'.$msg.'</strong></p></div>';
-			echo '<div class="alert alert-success" role="alert">' .$msg. '</div>';
-		else
+			// echo '<div class="alert alert-success" role="alert">' .$msg. '</div>';
+		// else
 			// echo '<div class="error"><p><strong>'.$msg.'</strong></p></div>';
-			echo '<div class="alert alert-danger" role="alert">'. $msg.'</div>';
+			// echo '<div class="alert alert-danger" role="alert">'. $msg.'</div>';
+			// 
+		echo '<div class="alert alert-' . $type .'" role="alert">' . $msg . '</div>';
+
 	}
 
 	public static function shorten($val) {
@@ -248,5 +260,9 @@ class Core_Html extends Core_Object {
     		else
     			echo sprintf('<option value="%s">%s (%s)</option>', $item->code, $item->code, $item->name);
     	}
+    }
+
+    public static function isChecked($bool) {
+    	echo ($bool)? 'checked="checked"' : '';
     }
 }

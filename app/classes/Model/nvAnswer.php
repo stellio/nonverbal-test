@@ -158,6 +158,19 @@ class Model_nvAnswer extends Core_Model {
 		}
 	}
 
+	public function getObjectListByQuestionId($id) {
+
+		if ($id) {
+
+			$query = "SELECT * FROM " . $this->_tableAnswers . ' WHERE question_id=' . $id;
+			// $type = 'ARRAY_A';
+			return $this->_db->get_results($query);
+
+		} else {
+			return false;
+		}
+	}
+
 	public function getListByQuestionIdAndTestId($questionId, $testId) {
 
 		if ($questionId && $testId) {

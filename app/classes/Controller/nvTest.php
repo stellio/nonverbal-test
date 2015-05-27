@@ -48,7 +48,7 @@ class Controller_nvTest extends Controller_TestMenuTemplate  {
 	 */
 	public function action_edit() {
 
-		$view = nvView::factory('test/edit');// View_nvTestEdit();
+		$view = nvView::factory('test/edit');
 		$test = nvModel::factory('nvTest');
 
 		if (isset($_GET['id']) and $_GET['id'] != 0)
@@ -134,6 +134,38 @@ class Controller_nvTest extends Controller_TestMenuTemplate  {
 //		$this->view->content = $list->getTestList();
 //		$this->view->show();
 		$this->action_index();
+	}
+
+	public function ajax_settings() {
+
+		$test = nvModel::factory('nvTest');
+		$response = 0;
+
+		if ($this->req('id') && $this->req('param')) {
+
+			$id = $this->req('id');
+			$param = $this->req('param');
+			$state = $this->req('state');
+
+			$test->loadById($id);
+
+			switch ($param) {
+				case 'debug':
+					$test->setDebug(($state == "true")? '1':'0');
+					break;
+
+				case 'access':
+					$test->setRegOnly(($state == "true")? '1':'0');
+					break;
+			}
+
+			if ($test->update($id)) {
+				$response = $this->jsonArray('success', $id);
+			}
+
+		}
+		wp_send_json($response);
+		exit;
 	}
 
 	public function ajax_createTest() {

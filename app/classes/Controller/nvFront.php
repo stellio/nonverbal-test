@@ -10,20 +10,42 @@ Author URI: http://www.stellio.org.ua
 /**
  * Frontend controller. Present test, view result
  */
-class Controller_nvFront extends NV_Controller {
+class Controller_nvFront extends Controller_FrontendTemplate {
 
 
 	public $url = NV_URL;
+	public $view = 0;
 
 	/**
 	 * Load js scripts. Registered plugin shortcode
 	 */
-	public function __construct() {
-
+	function __construct() {
 		parent::__construct();
-		add_action('wp_enqueue_scripts', array($this, 'enqueueJsCss'));
-		add_shortcode('treetest', array($this, 'shortcode'));
+		// add_action('wp_enqueue_scripts', array($this, 'enqueueJsCss'));
+		add_shortcode('nonverbal', array($this, 'shortcode'));
 	}
+
+	private function showMsg($text) {
+		echo '<div class="alert alert-danger" role="alert">' . $text . '</div>';	
+	}
+
+	private function array_cmp($first, $second) {
+
+		$result = true;
+
+		if (count($first) != 0 and count($second) !=0) {
+			if ($first[0] != $second[0]) {
+				$result = false;
+			}
+			else {
+				$result = true;
+				array_shift($first); array_shift($second);
+				$result = $this->array_cmp($first, $second);
+			}
+		}
+		return $result;
+	}
+
 
 	/**
 	 * Send json test structure, by id get from ajax request
@@ -32,28 +54,30 @@ class Controller_nvFront extends NV_Controller {
 
 		$debugMode = 0;
 		$result = array();
-		$test = new Model_nvTest();
-		$tpe = new Model_nvTpe();
-		$sign = new Model_nvSign();
-		$profile = new Model_nvProfile();
-		$question = new Model_nvQuestion();
-		$signsGroup = new Model_nvSignsGroup();
+		$tpe = nvModel::factory('nvTpe');
+		$test = nvModel::factory('nvTest');
+		$sign = nvModel::factory('nvSign');
+		$answer = nvModel::factory('nvAnswer');
+		$profile = nvModel::factory('nvProfile');
+		$relation = nvModel::factory('nvRelation');
+		$question = nvModel::factory('nvQuestion');
+		$signsGroup = nvModel::factory('nvSignsGroup');
 
 		$json = array();
 		$testId = $this->req('id');
 
 		if ($testId) {
 
-			$signsGroupList = array();
+			
 			$tpeQuadrasList = array();
-			$profilesList = array();
 
-			// load test to check is set debug mode
+			// check is set debug mode
 			$test->loadById($testId);
 
 			if ($test->isDebug()) {
 				$debugMode = 1;
 			}
+			$json['debugMode'] = $debugMode;
 
 
 			/*
@@ -61,24 +85,29 @@ class Controller_nvFront extends NV_Controller {
 			*/
 
 			// tpe
-			foreach ($signsGroup->getGroupsId($testId, $sign::TYPE_TPE) as $gid) {
-				
-				$signsGroup->loadGroup($testId, $gid);
-				$singGroup =  array(
-					"shortName" => $signsGroup->getShortName(),
-					"gType" => $signsGroup->getType(),
-					"firstSign" => array(
-						'points' => 0,
-						'code' => $signsGroup->firstPart->getCode(),
-						'name' => $signsGroup->firstPart->getName()
-					),
-					"secondSign" => array(
-						'points' => 0,
-						'code' => $signsGroup->secondPart->getCode(),
-						'name' => $signsGroup->secondPart->getName()
-					)
-				);
-				$signsGroupList[] = $singGroup;
+			$signsGroupList = array();
+
+			if ($signsGroup->getGroupsId($testId, nvModel::TYPE_TPE)) {
+
+				foreach ($signsGroup->getGroupsId($testId, nvModel::TYPE_TPE) as $gid) {
+					
+					$signsGroup->loadGroup($testId, $gid);
+					$singGroup =  array(
+						"shortName" => $signsGroup->getShortName(),
+						"gType" => $signsGroup->getType(),
+						"firstSign" => array(
+							'points' => 0,
+							'code' => $signsGroup->firstPart->getCode(),
+							'name' => $signsGroup->firstPart->getName()
+						),
+						"secondSign" => array(
+							'points' => 0,
+							'code' => $signsGroup->secondPart->getCode(),
+							'name' => $signsGroup->secondPart->getName()
+						)
+					);
+					$signsGroupList[] = $singGroup;
+				}
 			}
 
 			// functionality
@@ -102,6 +131,8 @@ class Controller_nvFront extends NV_Controller {
 				$signsGroupList[] = $singGroup;
 			}
 
+			$json['signsGroups'] = $signsGroupList;
+
 			/* Load Tpe quadras list */
 			foreach ($tpe->loadByTest($testId) as $item) {
 
@@ -113,10 +144,12 @@ class Controller_nvFront extends NV_Controller {
 
 				$tpeList[] = $l;
 			}
+			$json['tpelist'] = $tpeList;
 
 			/*
 				loading profiles
 			*/
+			$profilesList = array();
 
 			// tpe
 			foreach ($profile->loadByTestAndTypeId($testId, $sign::TYPE_TPE) as $pObj) {
@@ -144,10 +177,61 @@ class Controller_nvFront extends NV_Controller {
 				$profilesList[] = $pfl;
 			}
 
-			$json['signsGroups'] = $signsGroupList;
-			$json['tpelist'] = $tpeList;
+			// Questions by test id
+			$questionsList = array();
+
+			foreach ($question->getObjectListByTestId($testId) as $item) {
+
+				$answers = $answer->getObjectListByQuestionIdAndTestId($item->id, $testId);
+
+				$answers_code = array();
+				foreach ($answers as $i) {
+					$answers_code[] = $i->value;
+				}
+				
+				$the_question = array(
+					'id' => $item->id,
+					'type' => $item->type,
+					'cycle' => $item->cycle,
+					'answers_code' => $answers_code
+				);
+
+				$questionsList[] = $the_question;
+			}
+
+			// randomize questions
+			shuffle($questionsList);
+			$json['questions'] = $questionsList;
+
+			/*
+				Relations
+			 */
+			$relationList = array();
+			$relation_roots = $relation->getRoots($testId);
+			$relation_rows 	= $relation->getByTestId($testId);
+
+			foreach ($relation_roots as $root) {
+				
+				$subElements = 0;
+				$structure = array();
+				$structure = $root;
+
+				Controller_nvRelation::relationWalk($root->id, $relation_rows, &$subElements);
+				$structure->childs = $subElements;
+				$relationList[] = $structure;
+			}
+
+			$json['relations'] = $relationList;
+			
+
+
+			
+			
 			$json['profiles'] = $profilesList;
-			$json['debugMode'] = $debugMode;
+
+
+			
+			
 		}
 
 		wp_send_json($json);
@@ -160,12 +244,14 @@ class Controller_nvFront extends NV_Controller {
 		$frontView->show();
 	}
 
+	
+
 	/**
 	 * Return test result, and save result
 	 */
 	public function ajaxGetResult() {
 
-		$resultId = 0;
+		// $resultId = 0;
 		$results = array(
 			'lead' => array(
 				'tpeName' => "",
@@ -179,18 +265,22 @@ class Controller_nvFront extends NV_Controller {
 			'moreTypeInfo' => array()
 		);
 
-		$view = new View_nvFront();
-		$tpe = new Model_nvTpe();
-		$profile = new Model_nvProfile();
-		$resultModel = new Model_nvResult();
-		$statistic = new Model_nvStatistic();
+		$view = nvView::factory('front/result');
+
+		$tpe = nvModel::factory('nvTpe');
+		$profile = nvModel::factory('nvProfile');
+		$resultModel = nvModel::factory('nvResult');
+		$statistic = nvModel::factory('nvStatistic');
 
 		// response
 		$lang = $this->req('lang');
-		$leadtpe = $this->req("leadtpe");
-		$subtpe = $this->req("subtpe");
-		$func = $this->req("func");
 		$testId = $this->req("test_id");
+
+		$tpeList = $this->req("tpe");
+		$profileList = array_reverse($this->req('profile'));
+
+		$profileList = array_chunk($profileList, (count($profileList) / 2));
+
 
 		// survey from data
 		$svy_type = $this->req("type");
@@ -201,61 +291,73 @@ class Controller_nvFront extends NV_Controller {
 		$svy_nickname = $this->req("nickname");
 
 		if (empty($testId)) {
-			$view->showMsg("Ошибка! Не найден индификтор теста");
+			$this->showMsg("Ошибка! Не найден индификтор теста");
 			return;
 		}
 
-		if (empty($leadtpe) || empty($subtpe)) {
-			$view->showMsg("Ошибка! Не найден ТПЭ параметр");
+		if (empty($tpeList)) {
+			$this->showMsg("Ошибка! Не найден ТПЭ параметр");
 			return;
 		}
 
-		if (empty($func)) {
-			$view->showMsg("Ошибка! Не найден Функциональный профиль");
+		if (empty($profileList)) {
+			$this->showMsg("Ошибка! Не найден профиль");
 			return;
 		}
 
 		// get tpe name by code
 		// lead tpe load
-		$tpe->loadByCodeAndTestId($leadtpe, $testId);
+		$tpe->loadByCodeAndTestId($tpeList[0], $testId);
 		$results['lead']['tpeName'] = $tpe->getName();
 
 		// sub tpe load
-		$tpe->loadByCodeAndTestId($subtpe, $testId);
+		$tpe->loadByCodeAndTestId($tpeList[1], $testId);
 		$results['sub']['tpeName'] = $tpe->getName();
 
 
-		$functionalitySings = explode(',', $func);
+		// $functionalitySings = explode(',', $func);
 
 		// find lead type
-		foreach ($resultModel->getListByTestIdAndTpe($testId, $leadtpe) as $result) {
+		foreach ($resultModel->getListByTestIdAndTpe($testId, $tpeList[0]) as $result) {
 			$resultProfiles = explode(',', str_replace(' ', '', $result->func));
-			$intersect = array_intersect($functionalitySings, $resultProfiles);
-			if (count($intersect) == count($resultProfiles)) {
+			
+			$match = $this->array_cmp($resultProfiles, $profileList[0]);
+
+			if ($match) {
 				$results['lead']['typeName'] = $result->title;
 				$results['moreTypeInfo'][] = $result;
 			}
 		}
 
 		// find sub type
-		foreach ($resultModel->getListByTestIdAndTpe($testId, $subtpe) as $result) {
+		foreach ($resultModel->getListByTestIdAndTpe($testId, $tpeList[1]) as $result) {
 			$resultProfiles = explode(',', str_replace(' ', '', $result->func));
-			$intersect = array_intersect($functionalitySings, $resultProfiles);
-			if (count($intersect) == count($resultProfiles)) {
+			
+			$match = $this->array_cmp($resultProfiles, $profileList[1]);
+
+			if ($match) {
 				$results['sub']['typeName'] = $result->title;
 				$results['moreTypeInfo'][] = $result;
 			}
 		}
 
-		$tpeQuadras = array($leadtpe, $subtpe);
+		// $tpeQuadras = $tpelist;
 		// find profilye
-		foreach($profile->loadByTestAndTypeId($testId, $profile::TYPE_TPE) as $item) {
-			$marchList = explode(',', str_replace(' ', '', $item->sequence_of_sign));
+		// foreach($profile->loadByTestAndTypeId($testId, $profile::TYPE_TPE) as $item) {
+			// $marchList = explode(',', str_replace(' ', '', $item->sequence_of_sign));
 
-			$numberOfMatch = array_intersect($tpeQuadras, $marchList);
-			if (count($numberOfMatch) == count($tpeQuadras))
-				$results['profile'] = $item->name;
+			// $numberOfMatch = array_intersect($tpeQuadras, $marchList);
+			// if (count($numberOfMatch) == count($tpeQuadras))
+				// $results['profile'] = $item->name;
+		// }
+		// 
+		$tpeProfile = array();
+		foreach ($tpeList as $code) {
+			$tpe->loadByCodeAndTestId($code, $testId);
+			$tpeProfile[] = $tpe->getName();
 		}
+
+		$results['profile'] = implode(" - ", $tpeProfile);
 
 		if (!empty($results['moreTypeInfo'])) {
 			$statistic->setTestId($testId);
@@ -271,13 +373,17 @@ class Controller_nvFront extends NV_Controller {
 			$statistic->save();
 
 		} else {
-			$view->showMsg("Ошибка! Не удалось найти результат теста");
-			return;
+			$this->showMsg("Ошибка! Не удалось найти результат теста");
+			
+			// return;
 		}
 
-		$view->lang = $lang;
-		$view->results = $results;
-		$view->showResults();
+		$this->before();
+		$this->template->content = $view->bind('lang', $lang)
+										->bind('results', $results);
+
+		$this->after();
+
 		exit;
 	}
 
@@ -288,6 +394,7 @@ class Controller_nvFront extends NV_Controller {
 	 */
 	public function shortcode($attr) {
 
+		$this->loadStaticFiles();
 		$this->loadJsCssLibs();
 
 		$id = 0;
@@ -298,6 +405,7 @@ class Controller_nvFront extends NV_Controller {
 			ob_start();
 
 			$this->shortcodeProcessor($id);
+			
 			$content = ob_get_contents();
 
 			ob_end_clean();
@@ -327,16 +435,17 @@ class Controller_nvFront extends NV_Controller {
 	 * @param  int $id	test id
 	 * @return str 		html block with results
 	 */
-	private function shortcodeProcessor($id) {
+	public function shortcodeProcessor($id) {
 
-		$view = new View_nvFront();
-		$test = new Model_nvTest();
-		$answer = new Model_nvAnswer();
-		$question = new Model_nvQuestion();
+		$view = nvView::factory("front/test");
+		$test = nvModel::factory('nvTest');
+		$answer = nvModel::factory('nvAnswer');
+		$question = nvModel::factory('nvQuestion');
 
 		$questions = array();
 		$tpeQuestions = array();
 		$funcQuestions = array();
+
 
 //		$relation = new Model_Relation();
 //		$test->questions = array();
@@ -351,14 +460,14 @@ class Controller_nvFront extends NV_Controller {
 				}
 
 			// load questions with tpe type
-			foreach($question->getObjectListByTestIdAndType($id, Model_nvQuestion::TYPE_TPE) as $ques) {
+			foreach($question->getObjectListByTestIdAndType($id, nvModel::TYPE_TPE) as $ques) {
 				$answers = $answer->getObjectListByQuestionIdAndTestId($ques->id, $id);
 				$ques->answers = $answers;
 				$tpeQuestions[] = $ques;
 			}
 
 			// load questions with functionality type
-			foreach($question->getObjectListByTestIdAndType($id, Model_nvQuestion::TYPE_FUNCTIONAL) as $ques) {
+			foreach($question->getObjectListByTestIdAndType($id, nvModel::TYPE_FUNCTIONAL) as $ques) {
 				$answers = $answer->getObjectListByQuestionIdAndTestId($ques->id, $id);
 				$ques->answers = $answers;
 				$funcQuestions[] = $ques;
@@ -369,10 +478,15 @@ class Controller_nvFront extends NV_Controller {
 		shuffle($tpeQuestions);
 		shuffle($funcQuestions);
 
-		$view->test = $test;
-		$view->questions = array_merge($tpeQuestions, $funcQuestions);
+		// $view->test = $test;
+		// $view->questions = array_merge($tpeQuestions, $funcQuestions);
 		// $view->questions = $tpeQuestions;
-		$view->show();
+		$this->before();
+		$this->template->content = $view->bind('test', $test)
+										->bind('questions', array_merge($tpeQuestions, $funcQuestions));
+		// $this->template->content = $view->bind('id', $id);
+											
+		$this->after();
 	} 
 
 	/**
@@ -407,7 +521,7 @@ class Controller_nvFront extends NV_Controller {
 		// init the libs
 		wp_enqueue_script(
 			'nv_initlibs',
-			$url . 'includes/js/nonverbal-init-libs.js',
+			$url . 'assets/js/nonverbal-init-libs.js',
 			array('jquery')
 		);
 	}
@@ -422,19 +536,19 @@ class Controller_nvFront extends NV_Controller {
 		// load basic css for front view
 		wp_enqueue_style(
 			'nonverbal-front-style',
-			$url . 'includes/css/nonverbal-front.css'
+			$url . 'assets/css/nonverbal-front.css'
 		);
 
 		// load js engine - for passing the test
 		wp_enqueue_script(
 			'nonverbal-front',
-			$url . 'includes/js/nonverbal-front.js',
+			$url . 'assets/js/nonverbal-front.js',
 			array('jquery')
 		);
 
 		// setup translation for js
 		wp_localize_script(
-			'treetest-front', 
+			'nonverbal-front', 
 			'localize', 
 			array(
 				'ajaxurl' => admin_url('admin-ajax.php?lang='.get_locale()),

@@ -1,15 +1,17 @@
-<div class="wrap">
-    <div id="poststuff">
-        <h3 class="hndle">ТПЭ</h3>
-        <table class="wp-list-table widefat" id="">
+<div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">ТПЭ</h3>
+        </div>
+        <table class="table borderless">
             <thead>
                 <tr>
-                    <th scope="col">Признаки</th>
-                    <th scope="col">Действия</th>
+                    <th>Признаки</th>
+                    <th>Действия</th>
                 </tr>
             </thead>
-            <tbody id="the-list">
-            <?php if ($groupsTPE) { ?>
+            <tbody>
+                <?php if ($groupsTPE) { ?>
                 <?php foreach($groupsTPE as $group) { ?>
                 <tr>
                     <td>
@@ -49,28 +51,33 @@
             <?php } ?>
             </tbody>
         </table>
-        <p></p>
-        <?=nvHtml::button(
-            array(
-                'module' => 'nvSign',
-                'call' => 'edit',
-                'test_id' => $test->getId(),
-                'type' => nvModel::TYPE_TPE
-            ),
-            "Добавить",
-            "button-secondary ajax-call");
-        ?>
+    </div>
+            
+    <p></p>
+    <?=nvHtml::button(
+        array(
+            'module' => 'nvSign',
+            'call' => 'edit',
+            'test_id' => $test->getId(),
+            'type' => nvModel::TYPE_TPE
+        ),
+        "Добавить",
+        "btn btn-primary btn-sm ajax-call");
+    ?>
+    
 
-        <p></p>
-        <p></p>
-        <!-- <div class="postbox"> -->
-            <h3 class="hndle">Функциональные</h3>
-        <!-- </div> -->
-        <table class="wp-list-table widefat" id="">
+    
+    <p></p>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Функциональные</h3>
+        </div>
+        <table class="table">
             <thead>
-                <tr>
-                    <th scope="col">Признаки</th>
-                    <th scope="col">Действия</th>
+                <tr class="filters">
+                    <th>Признаки</th>
+                    <th>Действия</th>
                 </tr>
             </thead>
             <tbody id="the-list">
@@ -91,7 +98,7 @@
                             ),
                                 nvHtml::imgEdit(),
                                 "Редактировать",
-                                'ajax-call'
+                                'ajax-call btn btn-xs btn-info'
                             );?>
                             <?=nvHtml::link(array(
                                 'module' => 'nvSign',
@@ -102,7 +109,7 @@
                             ),
                                 nvHtml::imgDelete(),
                                 "Удалить",
-                                'ajax-call'
+                                "ajax-call btn btn-xs btn-danger"
                             );?>
                         </td>
                     </tr>
@@ -114,16 +121,16 @@
             <?php } ?>
             </tbody>
         </table>
-        <p></p>
-        <?=nvHtml::button(
-            array(
-                'module' => 'nvSign',
-                'call' => 'edit',
-                'test_id' => $test->getId(),
-                'type' => nvModel::TYPE_FUNCTIONAL
-            ),
-            "Добавить",
-            "button-secondary ajax-call");
-        ?>
     </div>
+    <p></p>
+    <?=nvHtml::button(
+        array(
+            'module' => 'nvSign',
+            'call' => 'edit',
+            'test_id' => $test->getId(),
+            'type' => nvModel::TYPE_FUNCTIONAL
+        ),
+        "Добавить",
+        "btn btn-primary btn-sm ajax-call");
+    ?>
 </div>

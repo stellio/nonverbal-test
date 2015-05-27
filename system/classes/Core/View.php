@@ -364,11 +364,16 @@ class Core_View
 	 * @param  string $msg  the message text
 	 * @param  string $type type of message. By default - error
 	 */
-	public static function admin_notices($msg, $type = 'error') {
-		if($type === 'info')
-			echo '<div class="updated"><p><strong>'.$msg.'</strong></p></div>';
-		else
-			echo '<div class="error"><p><strong>'.$msg.'</strong></p></div>';
+	public static function admin_notices($msg, $type = 'success') {
+		// if($type === 'info')
+			// echo '<div class="updated"><p><strong>'.$msg.'</strong></p></div>';
+			// echo '<div class="alert alert-success" role="alert">' .$msg. '</div>';
+		// else
+			// echo '<div class="error"><p><strong>'.$msg.'</strong></p></div>';
+			// echo '<div class="alert alert-danger" role="alert">'. $msg.'</div>';
+			// 
+		echo '<div class="alert alert-' . $type .'" role="alert">' . $msg . '</div>';
+
 	}
 
 	/**

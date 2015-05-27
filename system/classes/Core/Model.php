@@ -36,6 +36,7 @@ class Core_Model extends Core_Object {
 	protected $_tableResults;
 	protected $_tableProfiles;
 	protected $_tableQuestions;
+	protected $_tableRelations;
 	protected $_tableStatistic;
 	protected $_tableSignsGroups;
 
@@ -55,6 +56,7 @@ class Core_Model extends Core_Object {
 		$this->_tableResults = $this->_prefix . 'results';
 		$this->_tableProfiles = $this->_prefix . 'profiles';
 		$this->_tableQuestions = $this->_prefix . 'questions';
+		$this->_tableRelations = $this->_prefix . 'relations';
 		$this->_tableStatistic = $this->_prefix . 'statistic';
 		$this->_tableSignsGroups = $this->_prefix . 'signs_groups';
 

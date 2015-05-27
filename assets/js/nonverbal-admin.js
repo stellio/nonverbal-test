@@ -71,7 +71,63 @@ jQuery(document).ready(function ($) {
 			} else if (type == 'hide') {
 				$('div.wrap').find("div.loading-ajax").remove();
 			}
+		},
+
+		optGroupFilterInit : function() {
+
+		    $("#filterActivity").change(function () {
+
+		    	alert("change");
+
+		        $("#filterSubActivity").children("optgroup").children().prop("disabled", "disabled").prop("selected", false);
+		        var arr = $(this).val();
+
+		        // var text = $("#filterActivity option[value='" + arr + "']").text()
+
+		        log(arr);
+
+		        $('select#'+ arr).show().attr('name', 'code');
+		        $('select#2').hide().attr('name', '');
+
+		        //get options that are not selected
+		        // var arr1 = $('#filterActivity option:not(:selected)');
+
+		        // log(arr1[1].value);
+		        // log(arr2[1].value);
+		        //get the ones that are selected
+		        // var arr2 = $('#filterActivity').find(":selected");
+
+		        // for (var i = 0; i < arr.length; i++) {
+		            // $("#filterSubActivity").children("optgroup[label='" + text + "']").children().prop("disabled", false).prop("selected", "selected").show();
+		        // }
+
+		        //hide optgroups in subactivity
+		        // for (var j = 0; j < 3; j++) {
+		            // $("#filterSubActivity").children("optgroup").hide();
+		        // }
+
+		        // show the ones that are selected
+		        // for (var k = 0; k < arr2.length; k++) {
+		            // $("#filterSubActivity").children("optgroup[label='" + text + "']").show();
+		        // }
+
+		        $("#filterSubActivity").focus();
+		    });
+
+		},
+
+		/* Question part */
+		questionTypeInit : function() {
+
+			$('#type').change( function() {
+
+				if ($(this).val() == 2)
+					$('.cycle').hide();
+				else 
+					$('.cycle').show();
+			});
 		}
+
 	};
 
 	// initialization 
@@ -91,6 +147,8 @@ jQuery(document).ready(function ($) {
 
 		// tags input
 		$(".tagsinput").tagsinput();
+
+		
 	}
 
 
@@ -99,14 +157,14 @@ jQuery(document).ready(function ($) {
 	// 
 	
 	// Add new Test handler
-	$('#but_add_test').click(function () {
-		$(".new_test_block").toggle('medium');
+	$('#nonverbal_add_test').click(function () {
+		$(".nonverbal_new_test").toggle('medium');
 	});
 
 	// Create test button handler
-	$('#but_create_test').click(function (e) {
+	$('#nonverbal_create_test').click(function (e) {
 
-		var testName = $('#text_new_test_name');
+		var testName = $('#nonverbal_test_name');
 
 		if (tools.isEmpty(testName)) {
 			tools.stopWithMsg(e, "Пожалуйста введите название теста", testName);
@@ -119,26 +177,13 @@ jQuery(document).ready(function ($) {
 					if (result.status == 'error') {
 						alert(result.value);
 					} else if (result.status == 'success') {
-						tools.addRowNewTest(result.value, testName.val());
+						location.reload();
 					}
 				} else {
 					tools.loadingMsg('hide');
 					alert("Ошибка! Не удалось создать тест.");
 				}
 			});
-			// 
-			// jQuery.ajax({
-			// 	url : glob.ajaxurl,
-			// 	method: 'GET',
-			// 	data : 'action=wp_treetest_create_tes&test_name="' + testName.val() + '"',
-			// 	success: function(html) {
-			// 		console.log(html);
-			// 	},
-			// 	error : function() {
-			// 		console.log("error with ajax");
-			// 	}
-			// });
-
 		}
 	});
 
@@ -184,7 +229,9 @@ jQuery(document).ready(function ($) {
 	// 
 	
 	// Add answer field - by copying cloneable hidden input
-	$('#treetest-answer-add').click(function (e) {
+	$('#treetest-answer-add').live('click', function (e) {
+
+		log('add click');
 
 		var answer_rows = $('.answer_rows'); // answers div container
 		var cloneable = $('#cloneable');
@@ -195,33 +242,86 @@ jQuery(document).ready(function ($) {
 		clone.find('#treetest-answer-value').attr('name', "answers[new][" + rand + "][value]");
 		clone.find('#treetest-answer').attr('name', "answers[new][" + rand + "][text]");
 		// put to container
+		clone.find('#treetest-answer-value').select2({dropdownCssClass: 'dropdown-inverse'});
+		clone.find('.col-md-4').children(":first").hide();
 		clone.appendTo(answer_rows);
 		clone.attr('id', '');
 		clone.show();
+
 		
 	});
 
-	// Remove, added answer field
-	$("#treetest-answer-remove").live('click', function() {
+	// Remove, exists answer field
+	$("#treetest-answer-remove").live('click', function(e) {
 
-		var isDelete = confirm('Are You Sure?');
-		var name = $(this).parent().find('input').attr('name');
+		e.preventDefault();
 
-		if (!isDelete) {
-			e.preventDefault();
-			return false;
-		} else {
+		if (confirm('Are You Sure?')) {
+			
+			var name = $(this).parent().parent().find('#first').find('select').attr('name');
+			var input_name = $(this).parent().parent().find('#second').find('input').attr('name');
+
+			log(name);
+			
 			// change name - answers[exists][some_id] to answers[remove][some_id]
 			name = name.replace("exists", "remove");
+			input_name = input_name.replace("exists", "remove");
+
+			log(name);
+			
 			// set replaced name
-			$(this).parent().find('input').attr('name', name);
-			// clean value
-			$(this).parent().find('input').val('');
-			$(this).parent().hide();
+			// change select
+			$(this).parent().parent().find('#first').find('select').attr('name', name);
+			$(this).parent().parent().find('#first').find('select').val('');
+
+			// change input
+			$(this).parent().parent().find('#second').find('input').attr('name', input_name);
+			$(this).parent().parent().find('#second').find('input').val('');			
+			
+			$(this).parent().parent().hide();
+			// return true;
+
+		} else {
+			return;
+		}
+	});
+
+
+	//
+	// Result
+	//
+
+
+	$("#func_profile").live('change', function(){
+
+		var input = $("#func_input").val(),
+			selectedValue = $(this).val(),
+			value = null;
+
+		if (input == "")
+			input = [];
+		else
+			input = input.split(",");
+
+		if (selectedValue != null) {
+			for (var i = 0; i < selectedValue.length; i+=1) {
+				if (input.indexOf(selectedValue[i]) == -1){
+					input.push(selectedValue[i]);
+				}
+			}
+		} else {
+			input = [];
 		}
 
-		return true;
+		for (var j = 0; j < input.length; j+=1) {
 
+			if (selectedValue != null){
+				if (selectedValue.indexOf(input[j]) == -1){
+					input.splice(i, 1);
+				}
+			}
+		}
+		$('#func_input').val(input.join(','));
 	});
 
 	//
@@ -229,14 +329,13 @@ jQuery(document).ready(function ($) {
 	//
 
 	// Show more info
-	$(".btn_more_info").click(function (){
+	$(".btn_non_more_info").click(function (){
 		var id = $(this).attr("id");
-		$('#'+id+'.more_info_block').toggle();
-
+		$('#'+id+'.non_more_info_block').toggle();
 	});
 
 	// Remove statistic item
-	$(".btn_romove_statistic").click(function() {
+	$(".btn_non_romove_statistic").click(function() {
 
 		// get statistic item id
 		var id = $(this).attr("id");
@@ -245,7 +344,7 @@ jQuery(document).ready(function ($) {
 		if (confirm("Вы действительно хотите удалить результат?")){
 
 			tools.loadingMsg('show');
-			$.post(glob.ajaxurl, { id: id, action: "wp_treetest_remove_result"}, function(result, status) {
+			$.post(glob.ajaxurl, { id: id, action: "nonverbal_test_remove_result"}, function(result, status) {
 				if (status == 'success') {
 					tools.loadingMsg('hide');
 					if (result.status == 'error') {
@@ -253,7 +352,7 @@ jQuery(document).ready(function ($) {
 					} else if (result.status == 'success') {
 
 						$('tr#'+id).remove();
-						$('#'+id+'.more_info_block').remove();
+						$('#'+id+'.non_more_info_block').remove();
 					}
 				} else {
 					tools.loadingMsg('hide');
@@ -266,6 +365,35 @@ jQuery(document).ready(function ($) {
 	/**
 	 * Ajax Calls
 	 */
+	
+	/* switch buttons */
+	$('.ajax-checkbox').click(function() {
+
+		var bool = $(this).is(':checked');
+		var param = $(this).attr('param');
+		var id = $(this).attr('testid');
+
+		if (param != 'undefined' && id != 'undefined') {
+
+			tools.loadingMsg('show');
+			$.post(glob.ajaxurl, { id: id, param: param, state:bool, action: "nonverbal_test_settings"}, function(result, status) {
+
+				if (status == 'success') {
+					tools.loadingMsg('hide');
+					if (result.status == 'error') {
+						alert(result.value);
+					} else if (result.status == 'success') {
+
+					}
+				} else {
+					tools.loadingMsg('hide');
+					alert("Ошибка! Не удалось изменить опцию.");
+				}
+			});
+		}
+				
+
+	});
 	
 	function tinyMCE_init(){
 		 // quicktags({id : 'text'});
@@ -283,6 +411,12 @@ jQuery(document).ready(function ($) {
             //init tinymce
          // tinymce.init(tinyMCEPreInit.mceInit['text']);
 	};
+
+	$('a.confirm').live('click', function(e) {
+
+		if (!confirm("Вы действительно хотите удалить?"))
+			e.preventDefault();
+	}) ;
 
 	// main test menu action
 	$('a.ajax-call').live('click', function(e) {
@@ -305,16 +439,16 @@ jQuery(document).ready(function ($) {
 			$('.nv-content').html(result);
 
 			FlatUI_init();
+			tools.optGroupFilterInit();
+			tools.questionTypeInit();
 
 
 			if ( $( "textarea#text" ).length ) {
  
  				tinyMCE_init();
-    			alert("textarea exists");
+ 				log("tinyMCE_init");
  
 			}
-
-			// tinymce.init(tinyMCEPreInit.mceInit['text']);
 
 			if (status == 'success') {
 				tools.loadingMsg('hide');
@@ -348,6 +482,15 @@ jQuery(document).ready(function ($) {
 			$('.nv-content').html(result);
 
 			FlatUI_init();
+			tools.optGroupFilterInit();
+			tools.questionTypeInit();
+
+			if ( $( "textarea#text" ).length ) {
+ 
+ 				tinyMCE_init();
+ 				log("tinyMCE_init");
+ 
+			}
 
 			if (status == 'success') {
 				tools.loadingMsg('hide');
@@ -369,5 +512,6 @@ jQuery(document).ready(function ($) {
 
 	// init some function
 	init();
+	tools.optGroupFilterInit();
 	
 });
