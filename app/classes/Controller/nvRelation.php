@@ -29,10 +29,10 @@ class Controller_nvRelation extends Controller_ContentTemplate {
   				$structure = $buttons;
   				$item->childs = array();
 
-  				Controller_nvRelation::relationWalk($item->id, $items, &$item->childs);
+  				$item->childs = Controller_nvRelation::relationWalk($item->id, $items, $item->childs);
   			}
   		}
-
+  		return $structure;
 	}
 
 	/**
@@ -78,7 +78,7 @@ class Controller_nvRelation extends Controller_ContentTemplate {
 				$structure = $root;
 
 				// echo "<button>" . $root->code . "</button><br>";
-				$this->relationWalk($root->id, $relations, &$subElements);
+				$subElements = $this->relationWalk($root->id, $relations, $subElements);
 
 				$structure->childs = $subElements;
 				$structures[] = $structure;
