@@ -9,7 +9,7 @@ Author URI: http://www.stellio.org.ua
 /* 
 	TreeTest Front Style 
 */
-.treetest {
+.nonverbal {
 }
 
 /* Question Block */
@@ -18,44 +18,44 @@ Author URI: http://www.stellio.org.ua
 .testing-block .nav-block {
 }
 
-.treetest-sign-group-percentline {
+.nonverbal-sign-group-percentline {
 	/*border-radius: 5px;*/
 	/*margin: 5px;*/
 }
 
-.treetest-signs-block {
+.nonverbal-signs-block {
 	/*margin: 2%;*/
 }
 
-.treetest-sign-group-percentline div {
+.nonverbal-sign-group-percentline div {
 	/*border-*/
 }
 
 /* Navigation Left Side */
-.treetest-question-block .nav-block .left-side {
+.nonverbal-question-block .nav-block .left-side {
 	float: left;
 }
 
 /* Navigation Right Side */
-.treetest-question-block .nav-block .right-side {
+.nonverbal-question-block .nav-block .right-side {
 	float: right;
 	/*background-color: lime;*/
 }
 
-.treetest-question-block .clear {
+.nonverbal-question-block .clear {
 	clear: both;
 }
 
-.treetest-question-block {
+.nonverbal-question-block {
 	text-align: center;
 }
 
-.treetest-question-block .answer-block {
+.nonverbal-question-block .answer-block {
 	margin-top: 50px;
 	margin-bottom: 50px;
 }
 
-.treetest .treetest-start-test {
+.nonverbal .nonverbal-start-test {
 	font-size: 14px;
 	background: #3b8dbd;
 	color: #fff;
@@ -68,17 +68,17 @@ Author URI: http://www.stellio.org.ua
 	border-radius: 3px;
 }
 
-.treetest .treetest-start-test:hover {
+.nonverbal .nonverbal-start-test:hover {
 	background: #444;
 }
 
-.treetest .treetest-start-test:active {
+.nonverbal .nonverbal-start-test:active {
 	/*position:relative;*/
 	/*top:1px;*/
 }
 
 /* Navigation buttons */
-.treetest button.treetest-next-question {
+.nonverbal button.nonverbal-next-question {
 
 	font-size: 14px;
 	background: #3b8dbd;
@@ -92,18 +92,18 @@ Author URI: http://www.stellio.org.ua
 	border-radius: 3px;
 }
 
-.treetest button.treetest-next-question:hover {
+.nonverbal button.nonverbal-next-question:hover {
 	background: #444;
 }
 
-.treetest button.treetest-next-question:active {
+.nonverbal button.nonverbal-next-question:active {
 	position:relative;
 	top:1px;
 }
 
 
 /* Shor Result Button*/
-.treetest button.treetest-show-result {
+.nonverbal button.nonverbal-show-result {
 	-moz-box-shadow:inset 0px 1px 0px 0px #f5978e;
 	-webkit-box-shadow:inset 0px 1px 0px 0px #f5978e;
 	box-shadow:inset 0px 1px 0px 0px #f5978e;
@@ -130,7 +130,7 @@ Author URI: http://www.stellio.org.ua
 	text-shadow:0px 1px 0px #810e05;
 }
 
-.treetest button.treetest-show-result:hover {
+.nonverbal button.nonverbal-show-result:hover {
 	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #c62d1f), color-stop(1, #f24537));
 	background:-moz-linear-gradient(top, #c62d1f 5%, #f24537 100%);
 	background:-webkit-linear-gradient(top, #c62d1f 5%, #f24537 100%);
@@ -142,7 +142,7 @@ Author URI: http://www.stellio.org.ua
 }
 
 
-.treetest button.treetest-show-result:active {
+.nonverbal button.nonverbal-show-result:active {
 	position:relative;
 	top:1px;
 }

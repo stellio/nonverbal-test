@@ -145,7 +145,7 @@ jQuery(document).ready(function ($) {
 
 	// tools
 	function getTestId() {
-		return $('.treetest').attr('id');
+		return $('.nonverbal').attr('id');
 	};
 
 	/**
@@ -790,7 +790,7 @@ jQuery(document).ready(function ($) {
 		init: function(questionList, block, prefix){
 
 			this._block = block;
-			this._msgBlock = $('.treetest-msg-block');
+			this._msgBlock = $('.nonverbal-msg-block');
 			this._questionsList = questionList;
 			this._questionClassPrefix = prefix;
 			this._currentQuestionNumber = 0;
@@ -906,32 +906,32 @@ jQuery(document).ready(function ($) {
 			this._mRelations = new mRelations();
 
 				// views classes
-			this._viewTpes = new vTpes(this._tpeList, $('.treetest-tpe-block'));
+			this._viewTpes = new vTpes(this._tpeList, $('.nonverbal-tpe-block'));
 			this._tpeList.addObserver(this._viewTpes);
 
 			// Msg
-			this._msgBlock = $('.treetest-msg-block');
+			this._msgBlock = $('.nonverbal-msg-block');
 
 			// Functionality profiles div
-			this._profilesDiv = $('.treetest-profiles-block');
+			this._profilesDiv = $('.nonverbal-profiles-block');
 
 			// Description
-			this._descriptionBlock = $('.treetest-description');
+			this._descriptionBlock = $('.nonverbal-description');
 
 			// Question
-			this._questionsDiv = $('.treetest-question-block');
+			this._questionsDiv = $('.nonverbal-question-block');
 			this._questionsIdPrefix = 'question_id_';
 
 			// Result
-			this._resultsBlock = $('.treetest-result-block');
-			this._resultSpace = $('.treetest-result-space');
+			this._resultsBlock = $('.nonverbal-result-block');
+			this._resultSpace = $('.nonverbal-result-space');
 
 			// Repeat
-			this._repeatTestBlock = $('.treetest-repeat-test');
+			this._repeatTestBlock = $('.nonverbal-repeat-test');
 
 			// Debug
 			this._debugMode = false;
-			this._debugBlock = $('.treetest-debug-block');
+			this._debugBlock = $('.nonverbal-debug-block');
 		},
 
 		start: function() {
@@ -999,7 +999,7 @@ jQuery(document).ready(function ($) {
 
 			log('add');
 			var className = pair._id;
-			var progressBar = "<div style='width: 100%;' id='" + className + "' class='progress treetest-sign-group-percentline'></div>";
+			var progressBar = "<div style='width: 100%;' id='" + className + "' class='progress nonverbal-sign-group-percentline'></div>";
 
 			this._profilesDiv.append(progressBar);
 
@@ -1442,7 +1442,7 @@ jQuery(document).ready(function ($) {
 
 	/* Init test and connect ui */
 	function getTestId() {
-		return $('.treetest').attr('id');
+		return $('.nonverbal').attr('id');
 	}
 
 	/* Main Test */
@@ -1453,13 +1453,13 @@ jQuery(document).ready(function ($) {
 
 
 	/* Ui */
-	$('.treetest-start-test').click( function () {
+	$('.nonverbal-start-test').click( function () {
 		$(this).hide();
 		Test.start();
 	});
 
 
-	$("button#treetest-answer-button").click(function () {
+	$("button#nonverbal-answer-button").click(function () {
 		//log("answer click");
 		Test.setAnswer({
 			id: $(this).val(),

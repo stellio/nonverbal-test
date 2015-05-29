@@ -1,11 +1,11 @@
-<div class="container-fluid treetest" id="<?=$test->getId();?>">
-    <div class="row treetest-description">
+<div class="container-fluid nonverbal" id="<?=$test->getId();?>">
+    <div class="row nonverbal-description">
         <div class="col-md-12">
             <?php echo $test->getDescription(); ?>
         </div>
     </div>
-    <div class="row treetest-result-block" style="display: none;">
-        <div class="col-md-12 treetest-result-space">
+    <div class="row nonverbal-result-block" style="display: none;">
+        <div class="col-md-12 nonverbal-result-space">
             <div class="jumbotron">
                 <h2><?=__('Testing completed!', 'nonverbal-test')?></h2>
                 <p><?=__('Congratulations!', 'nonverbal-test')?></p>
@@ -14,31 +14,31 @@
             </div>
         </div>
     </div>
-    <div class="row treetest-debug-block" style="display: none;">
+    <div class="row nonverbal-debug-block" style="display: none;">
         <div class="col-md-12">
             <div class="panel panel-info" style="display: none;">
                 <div class="panel-heading"><?=__('Graphs of the distribution of signs', 'nonverbal-test')?></div>
                 <div class="panel-body">
-                    <div class="treetest-signs-block"></div>
+                    <div class="nonverbal-signs-block"></div>
                 </div>
             </div>
             <div class="panel panel-info">
                 <div class="panel-heading"><?=__('TPE graphics domination', 'nonverbal-test')?></div>
                 <div class="panel-body">
-                    <div class="treetest-tpe-block"></div>
+                    <div class="nonverbal-tpe-block"></div>
                 </div>
             </div>
             <div class="panel panel-info">
                 <div class="panel-heading"><?=__('Functionality profiles domination', 'nonverbal-test')?></div>
                 <div class="panel-body">
-                    <div class="treetest-profiles-block"></div>
+                    <div class="nonverbal-profiles-block"></div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="treetest-msg-block"></div>
+    <div class="nonverbal-msg-block"></div>
     <div class="row">
-        <div class="col-md-12 treetest-question-block" >
+        <div class="col-md-12 nonverbal-question-block" >
             <?php foreach($questions as $question) { ?>
                 <div class="question_id_<?=$question->id;?>" id="<?=$question->id;?>" type="<?=$question->type?>" style="display: none">
                     <?=$question->text;?>
@@ -46,7 +46,7 @@
                     <div class="answer-block">
                         <div class="btn-group" role="group" aria-label="">
                             <?php foreach ($question->answers as $answer) { ?>
-                                        <button type="button" value="<?=$answer->value;?>" name="question_id_<?=$question->id;?>" id="treetest-answer-button" profiletype="<?=$question->type?>" class="btn btn-lg btn-default">
+                                        <button type="button" value="<?=$answer->value;?>" name="question_id_<?=$question->id;?>" id="nonverbal-answer-button" profiletype="<?=$question->type?>" class="btn btn-lg btn-default">
                                             <?=$answer->text;?>
                                         </button>
                             <?php } ?>
@@ -61,10 +61,10 @@
     </div>
     <div class="row" style="margin: 10px 0 20px 0;">
         <div class="col-md-12">
-            <input type="button" class="treetest-start-test"  value="<?=__('Start testing', 'nonverbal-test');?>"/>
+            <input type="button" class="nonverbal-start-test"  value="<?=__('Start testing', 'nonverbal-test');?>"/>
         </div>
     </div>
-    <div class="row treetest-repeat-test" style="display: none">
+    <div class="row nonverbal-repeat-test" style="display: none">
         <div class="col-md-12">
             <input type="button" class="btn btn-info btn-lg" onclick="location.reload();" value="<?=__('Repeat testing', 'nonverbal-test')?>">
         </div>
@@ -72,7 +72,7 @@
 </div>
 
 <!-- form -->
-<div class="survey-form treetest hidden">
+<div class="survey-form nonverbal hidden">
     <?=__('Please, answer the following questions for the confidential collection of test statistics:', 'nonverbal-test')?>
     <form id="survey-form">
         <div class="form-group">
