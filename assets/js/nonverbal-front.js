@@ -807,6 +807,9 @@ jQuery(document).ready(function ($) {
 		},
 
 		first: function() {
+
+			log('start first');
+
 			if (this._questionsList.length > this._currentQuestionNumber)
 				this._block.find('.'+this._questionClassPrefix+this._questionsList[this._currentQuestionNumber].id).show('slow');
 			else
