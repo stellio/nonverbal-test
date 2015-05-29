@@ -329,7 +329,7 @@ jQuery(document).ready(function ($) {
 	//
 
 	// Show more info
-	$(".btn_non_more_info").click(function (){
+	$(".btn_non_more_info").live('click', function (){
 		var id = $(this).attr("id");
 		$('#'+id+'.non_more_info_block').toggle();
 	});
