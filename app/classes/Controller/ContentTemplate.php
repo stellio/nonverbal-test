@@ -29,8 +29,7 @@ class Controller_ContentTemplate extends Controller_nvTemplate {
 		$url = NV_URL;
 
 			// echo $url;
-
-		// css
+		// wp_enqueue_style('nv_fixes', $url . 'assets/css/nonverbal-fixes.css');
 		// wp_enqueue_style('nv_css_bootstrap', $url . 'includes/libs/bootstrap-featured/css/bootstrap.min.css');
 		wp_enqueue_style('nv_css-flat-ui-bootstrap', $url . 'includes/libs/Flat-UI/dist/css/vendor/bootstrap.min.css');
 		wp_enqueue_style('nv_css_flat-ui', $url . 'includes/libs/Flat-UI/dist/css/flat-ui.css');

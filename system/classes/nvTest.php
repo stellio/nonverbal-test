@@ -45,6 +45,12 @@ class nvTest extends Core_Test {
 			NV_URL . 'assets/css/nonverbal-admin.css'
 		);
 
+		wp_enqueue_style(
+			'nonverbal-fixes',
+			NV_URL . 'assets/css/nonverbal-bootstrap-fixes.css'
+		);
+
+
 		// Tools for answers add/remove
 		wp_enqueue_script(
 			'nonverbal-test-admin',

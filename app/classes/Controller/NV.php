@@ -44,10 +44,7 @@ class Controller_NV extends Controller_BackendTemplate  {
 	 */
 	public function action_index() {
 
-			// function loadFlat_UI() {
-			$url = NV_URL;
-
-			// echo $url;
+		$url = NV_URL;
 
 		// css
 		// wp_enqueue_style('nv_css_bootstrap', $url . 'includes/libs/bootstrap-featured/css/bootstrap.min.css');
