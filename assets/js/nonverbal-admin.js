@@ -466,6 +466,53 @@ jQuery(document).ready(function ($) {
 		});
 	});
 
+	$('button.ajax-call').live('click', function(e) {
+
+		e.preventDefault();
+		var cmd = $(this).attr("href");
+
+		if (cmd.indexOf("delete") > -1) {
+			if (confirm("Вы действительно хотите удалить?")) {
+
+			} else {
+				return;
+			}
+			
+		}
+
+		tools.loadingMsg('show');
+		$.post(glob.ajaxurl+ "?" + cmd, { action : 'nonverbal_test_menu_action'}, function(result, status) {
+
+			$('.nv-content').html(result);
+
+			FlatUI_init();
+			tools.optGroupFilterInit();
+			tools.questionTypeInit();
+
+
+			if ( $( "textarea#text" ).length ) {
+ 
+ 				tinyMCE_init();
+ 				log("tinyMCE_init");
+ 
+			}
+
+			if (status == 'success') {
+				tools.loadingMsg('hide');
+
+				if (result.status == 'error') {
+					alert(result.value);
+				} else if (result.status == 'success') {
+
+					$('.nv-content').html(result.value);
+				} else {
+					tools.loadingMsg('hide');
+
+				}
+			}
+		});
+	});
+
 	// test forms action
 	$('form.ajax-call').live('submit', function(e) {
 
