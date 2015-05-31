@@ -65,11 +65,13 @@
 		                    </ul>
 	                 	</div>
 			        </li>
+			        <!--
 			        <li>
 			        	<div class="btn-group btn">
-	              			<button class="ajax-call btn btn-primary" href="admin.php?page=NV&module=nvStatistic&test_id=<?=$id;?>">Статистика</button>	
+	              			<button class="ajax-call btn btn-primary" href="admin.php?page=NV&module=nvStatistic&test_id=<?//=$id;?>">Статистика</button>	
 	              		</div>
 			        </li>
+			        -->
 	               </ul>
 	            </div><!-- /.navbar-collapse -->
 	        </nav><!-- /navbar -->
