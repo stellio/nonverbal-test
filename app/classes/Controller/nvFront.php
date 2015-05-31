@@ -453,9 +453,9 @@ class Controller_nvFront extends Controller_FrontendTemplate {
 		if ($id) {
 			$test->loadById($id);
 
-			if ($test->isRegOnly())
+			if (!$test->isRegOnly())
 				if (!is_user_logged_in()) {
-					$view->showMsg("Тест доступен только для зарегистрированых пользователей");
+					nvView::admin_notices(__('The test is available only for registered users!', 'nonverbal-test'), 'danger');
 					return;
 				}
 
