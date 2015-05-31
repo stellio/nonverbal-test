@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WP TreeTest 0.1\n"
-"POT-Creation-Date: 2015-05-27 22:11+0200\n"
-"PO-Revision-Date: 2015-05-27 22:15+0200\n"
+"POT-Creation-Date: 2015-05-31 16:46+0200\n"
+"PO-Revision-Date: 2015-05-31 16:46+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -16,6 +16,10 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __\n"
 "X-Poedit-SearchPath-0: ../app\n"
+
+#: ../app/classes/Controller/nvFront.php:458
+msgid "The test is available only for registered users!"
+msgstr "Тест доступен только для зарегистрированных пользователей!"
 
 #: ../app/classes/Controller/nvFront.php:555
 msgid "TPE"
